@@ -1,1 +1,1 @@
-** Game for Fundamentals of Project Activity **
+**Game for Fundamentals of Project Activity**
