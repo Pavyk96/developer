@@ -202,43 +202,25 @@ style input:
 ## and action fields.
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#choice
-
-# screen two_card_choice_menu(response):
-#     $ data = response.split()
-#     $ text = data[0]
-#     $ position = data[1]
-#     if(position == "at left"):
-#         x = 0.2
-#         y = 0.1
-#     imagebutton:
-#         xpos 0.2
-#         ypos 0.1
-#         auto "gui/button/choice_%s_background.png"
-#         action [Hide("displayTextScreen")]
-
-#         hovered Show("displayTextScreen", displayText = text, xposition = x, yposition = y)  
-#         unhovered Hide("displayTextScreen")
-
-# # screen displayTextScreen:
-#     default displayText = ""
-#     default xposition = 0
-#     default yposition = 0
-#     vbox:
-#         xpos xposition
-#         ypos yposition
-#         frame: 
-#             text displayText
 init:
-    $ choice_var = ""
+    $ card_shirts = ""
 
 screen choice(items):
     style_prefix "choice"
+    default card_toggle = False
+    default card_shirts_list = []
+    default card_image = ""
+    default textField_text = ""
+
+
+
+    $ card_shirts_list = card_shirts.split(',')
+    
     if len(items) > 3:
         python:
             raise ValueError('Too many options were given.')
     
-    
-    if choice_var == "":
+    if card_shirts == "":
         hbox:
             for i in items:
                 textbutton i.caption action i.action
@@ -246,12 +228,13 @@ screen choice(items):
         hbox:
             for i in items:
                 button:
+                    # hovered SetVariable("textField_text", i.caption)
+                    # unhovered SetVariable("textField_text", "")
                     minimum 466, 733
-                    idle_background "images/[choice_var].png"
-                    hover_background "images/eyes.png"
+                    idle_background "images/cards/[card_shirts].png"
+                    hover_background "images/cards/eyes.png"
                     text i.caption align 0.5, 0.5
-                    action i.action
-
+                    action NullAction()
 
 
 style choice_hbox is hbox
