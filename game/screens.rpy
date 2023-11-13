@@ -203,14 +203,55 @@ style input:
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#choice
 
+# screen two_card_choice_menu(response):
+#     $ data = response.split()
+#     $ text = data[0]
+#     $ position = data[1]
+#     if(position == "at left"):
+#         x = 0.2
+#         y = 0.1
+#     imagebutton:
+#         xpos 0.2
+#         ypos 0.1
+#         auto "gui/button/choice_%s_background.png"
+#         action [Hide("displayTextScreen")]
+
+#         hovered Show("displayTextScreen", displayText = text, xposition = x, yposition = y)  
+#         unhovered Hide("displayTextScreen")
+
+# # screen displayTextScreen:
+#     default displayText = ""
+#     default xposition = 0
+#     default yposition = 0
+#     vbox:
+#         xpos xposition
+#         ypos yposition
+#         frame: 
+#             text displayText
+init:
+    $ choice_var = ""
+
 screen choice(items):
     style_prefix "choice"
     if len(items) > 3:
         python:
             raise ValueError('Too many options were given.')
-    hbox:
-        for i in items:
-            textbutton i.caption action i.action
+    
+    
+    if choice_var == "":
+        hbox:
+            for i in items:
+                textbutton i.caption action i.action
+    else:
+        hbox:
+            for i in items:
+                button:
+                    minimum 466, 733
+                    idle_background "images/[choice_var].png"
+                    hover_background "images/eyes.png"
+                    text i.caption align 0.5, 0.5
+                    action i.action
+
 
 
 style choice_hbox is hbox
