@@ -7,6 +7,11 @@ define vas = Character("Вася", color="#00e4fd")
 # background images
 image fountain_bg = im.Scale("bg/fountain.png", 1920, 1080)
 image balcony_bg = im.Scale("bg/balcony.png", 1920, 1080)
+image map = im.Scale("bg/test1.png", 1920, 1080)
+image vasya_at_the_computer = im.Scale("bg/Vasya at the computer.png", 1920, 1080)
+image vasya_at_the_computer_surprised = im.Scale("bg/Vasya at the computer with a surprised face.png", 1920, 1080)
+image portal = im.Scale("bg/portal.png", 1920, 1080)
+image forest_without_vasa = im.Scale("bg/forest_without_vasa.png", 1920, 1080)
 
 # obstacle images
 
@@ -14,17 +19,35 @@ image balcony_bg = im.Scale("bg/balcony.png", 1920, 1080)
 image forest_and_road_purple_wheel_with_vasya = im.Scale("FirstChapter/forest and road final without wheel.png", 1920, 1080) 
 
 # character sprites
-image vas normal = im.Scale("FirstChapter/vasya.png.", 326, 805)
-image vas big thinking = im.Scale("FirstChapter/Head and question mark.png.", 375, 705)
-image vas normal thinking = im.Scale("FirstChapter/Head and question mark.png.", 250, 470)
-image vas small thinking = im.Scale("FirstChapter/Head and question mark.png.", 187.5, 352.5)
+image vas normal = im.Scale("character/vasya.png.", 500, 900)
+image vas sad = im.Scale("character/boy casual sad.png.", 500, 900)
+image vas happy = im.Scale("character/boy casual happy.png", 500, 900)
+image vas angry = im.Scale("character/boy casual angry.png.", 500, 900)
+image vas nervous = im.Scale("character/boy casual nervous.png.", 500, 900)
+image vas flustered = im.Scale("character/boy casual flustered.png.", 500, 900)
+image vas confused = im.Scale("character/boy casual confused.png.", 500, 900)
+image vas shocked = im.Scale("character/boy casual shocked.png.", 500, 900)
+image vas cry = im.Scale("character/boy casual cry.png.", 500, 900)
 
 # The game starts here.
 label start:
-    # call introdution
+    call variables
+    call preface
+    call introdution
 
     # first chapter
     call firstChapter  
+    return
+
+#  Предисловие Pavyk96
+label preface:
+    show vasya_at_the_computer
+    "Вася, которому мы помогали исправлять ошибки на Ulearn, закончил университет и начал разработку собственной игры."
+    "У него возникли проблемы в создании игры, появились баги, которые нужно исправить, и в этом ему очень нужна ваша помощь!"
+    show vasya_at_the_computer_surprised
+    pause 2
+    show portal
+    "После чего вы попадает вместе с Васей в игру..." 
     return
 
 # introdution section
@@ -41,70 +64,48 @@ label introdution:
 
 # first chapter
 label firstChapter:
-    show forest_and_road_purple_wheel_with_vasya
-    pause 0.5
-    vas "У повозки куда-то пропало колесо!"
-    vas "Можешь мне помочь?"
-    vas  "Пожалуйста..."
-    menu:
-        "text":
-            "reaction"
-    $ choice_var = "mouth"
-    menu:
-        "text":
-            "new reaction"
-    return
-        
-label success:
-    "SUCCESS!"
+    call worldMap
+    call brokenCart
     return
 
-# # map section. Chapter 1.1  
-# label worldMap:
-#     scene map
-#     show vas normal at left
-#     with fade
-
-#     show vas cry
-#     "О нет! У Васи что-то случилось!"
+# map section. Chapter 1.1  
+label worldMap:
+    scene forest_without_vasa
+    with fade
+    show vas normal at left
+    "Перед собой вы видите фэнтезийный мир и озадаченного Васю"
     
-#     menu:
-#         'Спросить: "Что случилось?" ':
-#             call whatHappend
-#         "Продолжить любоваться Васей":
-#             call admireVasya
-#     return
+    menu:
+        'Спросить: "Что случилось?" ':
+            call whatHappend
+        "Оглядеться и оценить обстановку":
+            call admireVasya
+    return
 
 
 
-# label whatHappend:
-#     vas "Я зашел в свою игру, но тут слишком много багов."
-#     show vas sad
-#     vas "Помоги, пожалуйста!"
-#     return
+label whatHappend:
+    vas "Я зашел в свою игру, но тут слишком много багов."
+    show vas sad
+    vas "Помоги, пожалуйста!"
+    return
 
-# label admireVasya:
-#     show vas nervous
-#     pause 0.5
+label admireVasya:
+    show forest_without_vasa
+    show vas normal at left
+    with fade
     
-#     show vas confused
-#     pause 0.5
-
-#     show vas shocked
-#     pause 0.6
-
-#     show vas flustered
-#     pause 0.2
-
-#     show vas normal
+    vas """*Вася смотрел на вас около 5 минут и не понимал, почему вы молчите*
     
-#     vas """Извини, но не мог бы ты мне помочь?
+    Привет, я очень рад тебя видеть!
     
-#     Я зашел в свою игру, но тут слишком много багов.
+    Можешь мне помочь пожалуйста?
+    """
 
-#     Надо что-то сделать!
-#     """
-#     return
+    menu:
+        'Спросить: "Что случилось?" ':
+            call whatHappend
+    return
 
 # # Chapter 1.2
 # label brokenCart:
