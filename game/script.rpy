@@ -18,22 +18,10 @@ image forest_without_vasa = im.Scale("bg/forest_without_vasa.png", 1920, 1080)
 # enviroment images
 image forest_and_road_purple_wheel_with_vasya = im.Scale("FirstChapter/forest and road final without wheel.png", 1920, 1080) 
 
-# character sprites
-image vas normal = im.Scale("character/vasya.png.", 500, 900)
-image vas sad = im.Scale("character/boy casual sad.png.", 500, 900)
-image vas happy = im.Scale("character/boy casual happy.png", 500, 900)
-image vas angry = im.Scale("character/boy casual angry.png.", 500, 900)
-image vas nervous = im.Scale("character/boy casual nervous.png.", 500, 900)
-image vas flustered = im.Scale("character/boy casual flustered.png.", 500, 900)
-image vas confused = im.Scale("character/boy casual confused.png.", 500, 900)
-image vas shocked = im.Scale("character/boy casual shocked.png.", 500, 900)
-image vas cry = im.Scale("character/boy casual cry.png.", 500, 900)
-
 # The game starts here.
 label start:
     call variables
     call preface
-    call introdution
 
     # first chapter
     call firstChapter  
@@ -48,18 +36,6 @@ label preface:
     pause 2
     show portal
     "После чего вы попадает вместе с Васей в игру..." 
-    return
-
-# introdution section
-label introdution:
-    # show fountain_bg
-    "Вася, которому мы помогали исправлять ошибки на Ulearn, закончил университет и начал разработку собственной игры."
-    pause 0.5
-
-    show vas normal
-    "Один."
-    "Один, в своей квартире!"
-    hide vas
     return
 
 # first chapter
@@ -81,8 +57,6 @@ label worldMap:
         "Оглядеться и оценить обстановку":
             call admireVasya
     return
-
-
 
 label whatHappend:
     vas "Я зашел в свою игру, но тут слишком много багов."
