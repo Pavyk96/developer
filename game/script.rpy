@@ -2,76 +2,53 @@
     $ config.keymap['skip'].remove('K_LCTRL')
     $ config.keymap['skip'].remove('K_RCTRL')
 
-define vas = Character("Vasya", color="#00e4fd")
+define vas = Character("Вася", color="#00e4fd")
 
 # background images
-image fountain_bg = im.Scale("bg/fountain.png", 1920, 1080)
-image balcony_bg = im.Scale("bg/balcony.png", 1920, 1080)
-image map = im.Scale("bg/test1.png", 1920, 1080)
-image vasya_at_the_computer = im.Scale("bg/Vasya at the computer.png", 1920, 1080)
-image vasya_at_the_computer_surprised = im.Scale("bg/Vasya at the computer with a surprised face.png", 1920, 1080)
 image portal = im.Scale("bg/portal.png", 1920, 1080)
 image forest_without_vasa = im.Scale("bg/forest_without_vasa.png", 1920, 1080)
 
-# obstacle images
-image broken_cart = im.Scale("obstacles/broken cart.jpg", 860, 540)
-
+# character sprites
 
 # character sprites
-image vas normal = im.Scale("character/vasya.png.", 500, 900)
-image vas sad = im.Scale("character/boy casual sad.png.", 500, 900)
-image vas happy = im.Scale("character/boy casual happy.png", 500, 900)
-image vas angry = im.Scale("character/boy casual angry.png.", 500, 900)
-image vas nervous = im.Scale("character/boy casual nervous.png.", 500, 900)
-image vas flustered = im.Scale("character/boy casual flustered.png.", 500, 900)
-image vas confused = im.Scale("character/boy casual confused.png.", 500, 900)
-image vas shocked = im.Scale("character/boy casual shocked.png.", 500, 900)
-image vas cry = im.Scale("character/boy casual cry.png.", 500, 900)
+image vas normal = im.Scale("FirstChapter/vasya.png.", 326, 805)
+image vasya_at_the_computer = im.Scale("bg/Vasya at the computer.png", 1920, 1080)
+image vasya_at_the_computer_surprised = im.Scale("bg/Vasya at the computer with a surprised face.png", 1920, 1080)
 
+# enviroment sprites
+image forest_and_road_purple_wheel_with_vasya = im.Scale("FirstChapter/forest and road final without wheel.png", 1920, 1080) 
+image forest_and_road_normal_with_vasya = im.Scale("FirstChapter/forest and road final.png", 1920, 1080)
 # The game starts here.
 label start:
     call variables
-    call preface
-    call introdution
+
+    # introduction
+    call Preface
 
     # first chapter
-    call firstChapter  
+    call FirstChapter  
     return
 
 #  Предисловие Pavyk96
-label preface:
+label Preface:
     show vasya_at_the_computer
     "Вася, которому мы помогали исправлять ошибки на Ulearn, закончил университет и начал разработку собственной игры."
-    "У него возникли проблемы в создании игры, появились баги, которые нужно исправить, и в этом ему очень нужна ваша помощь!"
+    "У него возникли проблемы в создании игры, появились баги, которые нужно исправить. В этом ему очень нужна ваша помощь!"
     show vasya_at_the_computer_surprised
     pause 2
     show portal
-    "После чего вы попадает вместе с Васей в игру..." 
-    return
-
-# introdution section
-label introdution:
-    show fountain_bg
-    show vas normal
-    "Привет! Это Вася."
-    "Васе 23 года."
-    "Он - выпускник УрФУ, живет в Екатеринбурге."
-    show vas sad
-    "Один."
-    show vas happy
-    "Один, в своей квартире!"
-    show vas angry
-    hide vas
+    "Вас с Васей засасывает в игру..." 
     return
 
 # first chapter
-label firstChapter:
-    call worldMap
-    call brokenCart
+label FirstChapter:
+    call WorldMap
+    call BrokenCart
+    call CartIsFixed
     return
 
 # map section. Chapter 1.1  
-label worldMap:
+label WorldMap:
     scene forest_without_vasa
     with fade
     show vas normal at left
@@ -79,59 +56,99 @@ label worldMap:
     
     menu:
         'Спросить: "Что случилось?" ':
-            call whatHappend
+            call what_happend
         "Оглядеться и оценить обстановку":
-            call admireVasya
+            call admire_vasya
     return
 
-
-
-label whatHappend:
+label what_happend:
     vas "Я зашел в свою игру, но тут слишком много багов."
+    show vas normal
     vas "Помоги, пожалуйста!"
     return
 
-label admireVasya:
+label admire_vasya:
     show forest_without_vasa
     show vas normal at left
     with fade
     
-    vas """*Вася смотрел на вас около 5 минут и не понимал, почему вы молчите*
+    "Вася смотрел на вас около 5 минут и не понимал, почему вы молчите"
     
-    Привет, я очень рад тебя видеть!
+    vas "Привет, я очень рад тебя видеть!"
     
-    Можешь мне помочь пожалуйста?
-    """
+    vas "Можешь мне помочь пожалуйста?"
 
     menu:
         'Спросить: "Что случилось?" ':
-            call whatHappend
+            call what_happend
     return
 
 # Chapter 1.2
-label brokenCart:
-    show vas normal at left
-    show broken_cart at topright
-    vas "Повозка почему-то сломалась..."
-    hide broken_cart
+label BrokenCart:
+    scene forest_and_road_purple_wheel_with_vasya with fade
+    vas "У повозки пропало куда-то колесо."
+    vas "Можешь мне помочь пожалуйста?"
+    menu: 
+        "Подумать над решением этой проблемы":
+            "Хм{w=0.2}.{w=0.2}.{w=0.2}.{w=0.2}{nw}"
+            "Хм{w=0.2}.{w=0.2}.{w=0.2}.{w=0.2}{nw}"
+            "Хм{w=0.2}.{w=0.2}.{w=0.2}.{w=0.2}{nw}"
+    "Вы вместе подумали и нашли несколько решений"
+    
+    vas "Как ты думаешь, какой вариант лучше?"
+
     menu:
-        "Рядом лес! Прсто сделаем новое колесо и все...":
-            "Это было долго, ты потерял много времени. Но ты справилися!"
-        "Написать грамотную функцию поиска колес":
-            call searchWheelFunction   
-        "Написать костыль, чтобы повозка ездила на трех колесах":
-            "Странно, но это сработало. Вы быстро справились с задачей! {w=3}Но теперь по всему миру трехколесные повозки..."
+        "Изменить код, чтобы части от повозки искались сами, рядом в лесу":
+            call chapter1_2_code_game
+            vas "Мы хорошо постарались и исправили нужную функцию!"
+            "Выглядит надёжно, теперь вы можете отправляться дальше!"
+        "Рядом лес! Просто сделаем новое колесо, да и все!":
+            if coder_points >= 0.2:
+                $ coder_points -= 0.2
+            vas "Это было долго, мы потеряли много времени, но справились!" 
+            vas "Выглядит вроде надежно, можем, наверное, отправляться дальше..."
+        "Повозка сможет ехать и на трех колесах, зачем ей четвертое?":
+            "Странно, но это сработало."
+            call three_wheeled_carts
     return
 
-label searchWheelFunction:
-    show vas sad
-    "currently unavaliable"
+label chapter1_2_code_game:
+    "In development..."
+    $ coder_points += 5
     return
 
-label end:
-    scene balcony_bg
-    "THE END!"
+label three_wheeled_carts:
+    vas "Выглядит не очень надежно. Давай все-таки попробуем другой способ?"
+    menu:
+        "Изменить код, чтобы части от повозки искались сами, рядом в лесу":
+            call chapter1_2_code_game
+            "Мы хорошо постарались и исправили нужную функцию!"
+        "Рядом лес! Просто сделаем новое колесо, да и все!":
+            if coder_points >= 0.2:
+                $ coder_points -= 0.2
+            "Это было долго, мы потеряли много времени, но справились!" 
+            vas "Выглядит вроде надежно, можем, наверное, отправляться дальше..."
+    return
+
+# Chapter 1.3 
+label CartIsFixed:
+    scene forest_and_road_normal_with_vasya
+    menu:
+        "Поехали дальше!":
+            return
+        "Куда мы отправляемя и зачем?":
+            call chapter1_3_where_to
+    return
+
+label chapter1_3_where_to:
+    vas "Нам нужно доставить снаряжение для авантюристов в деревню Гудзё"
+    vas "Около неё появился данж с монстрами, и никто не может доставить в деревню вооружение!"
     return
 
 label variables:
+    $ coder_points = 0.0
+    return
+
+label end:
+    "THE END!"
     return

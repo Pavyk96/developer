@@ -93,7 +93,6 @@ define gui.title_text_size = 75
 define gui.main_menu_background = "gui/main_menu.png"
 define gui.game_menu_background = "gui/game_menu.png"
 
-
 ## Dialogue ####################################################################
 ##
 ## These variables control how dialogue is displayed on the screen one line at a
@@ -207,14 +206,14 @@ define gui.quick_button_text_selected_color = gui.accent_color
 ##
 ## Choice buttons are used in the in-game menus.
 
-define gui.choice_button_width = 425
-define gui.choice_button_height = 550   
+define gui.choice_button_width = 466
+define gui.choice_button_height = 733   
 define gui.choice_button_tile = False
-define gui.choice_button_borders = Borders(5, 5, 5, 5)
+define gui.choice_button_borders = Borders(10, 5, 10, 5)
 define gui.choice_button_text_font = gui.menu_font
 define gui.choice_button_text_size = gui.menu_text_size
 define gui.choice_button_text_xalign = 0.5
-define gui.choice_button_text_yalign = 0.3
+define gui.choice_button_text_yalign = 0.5
 define gui.choice_button_text_idle_color = '#000000'
 define gui.choice_button_text_hover_color = "#000000"
 define gui.choice_button_text_insensitive_color = '#8888887f'

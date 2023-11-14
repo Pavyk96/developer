@@ -202,15 +202,39 @@ style input:
 ## and action fields.
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#choice
+init:
+    $ card_shirts = ""
 
 screen choice(items):
     style_prefix "choice"
+    default card_toggle = False
+    default card_shirts_list = []
+    default card_image = ""
+    default textField_text = ""
+
+
+
+    $ card_shirts_list = card_shirts.split(',')
+    
     if len(items) > 3:
         python:
             raise ValueError('Too many options were given.')
-    hbox:
-        for i in items:
-            textbutton i.caption action i.action
+    
+    if card_shirts == "":
+        hbox:
+            for i in items:
+                textbutton i.caption action i.action
+    else:
+        hbox:
+            for i in items:
+                button:
+                    # hovered SetVariable("textField_text", i.caption)
+                    # unhovered SetVariable("textField_text", "")
+                    minimum 466, 733
+                    idle_background "images/cards/[card_shirts].png"
+                    hover_background "images/cards/eyes.png"
+                    text i.caption align 0.5, 0.5
+                    action NullAction()
 
 
 style choice_hbox is hbox
