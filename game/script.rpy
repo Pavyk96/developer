@@ -3,15 +3,17 @@
     $ config.keymap['skip'].remove('K_RCTRL')
 
 define vas = Character("Вася", color="#00e4fd")
+define kas = Character("Касеки", color="#fbff00ff")
 
 # background images
 image portal = im.Scale("bg/portal.png", 1920, 1080)
+image blank = im.Scale("bg/blank background.jpg", 1920, 1080)
 image forest_without_vasa = im.Scale("bg/forest_without_vasa.png", 1920, 1080)
 
 # character sprites
-
-# character sprites
+image dummy = im.Scale("character/dummy.png.", 768, 768)
 image vas normal = im.Scale("FirstChapter/vasya.png.", 326, 805)
+image kas normal = im.Scale("SecondChapter/kaseki.png.", 326, 805)
 image vasya_at_the_computer = im.Scale("bg/Vasya at the computer.png", 1920, 1080)
 image vasya_at_the_computer_surprised = im.Scale("bg/Vasya at the computer with a surprised face.png", 1920, 1080)
 
@@ -20,14 +22,18 @@ image forest_and_road_purple_wheel_with_vasya = im.Scale("FirstChapter/forest an
 image forest_and_road_normal_with_vasya = im.Scale("FirstChapter/forest and road final.png", 1920, 1080)
 # The game starts here.
 label start:
-    call variables
+    call variables from _call_variables
 
     # introduction
-    call Preface
+    call Preface from _call_Preface
 
     # first chapter
-    call FirstChapter  
+    call FirstChapter from _call_FirstChapter  
+
+    # second chapter
+    call SecondChapter
     return
+
 
 #  Предисловие Pavyk96
 label Preface:
@@ -42,12 +48,16 @@ label Preface:
 
 # first chapter
 label FirstChapter:
-    call WorldMap
-    call BrokenCart
-    call CartIsFixed
+    call WorldMap from _call_WorldMap
+    call BrokenCart from _call_BrokenCart
+    call CartIsFixed from _call_CartIsFixed
     return
 
-# map section. Chapter 1.1  
+label SecondChapter:
+    call ComingOfKaseki
+    return
+
+# map section. Chapter 1.1      
 label WorldMap:
     scene forest_without_vasa
     with fade
@@ -56,9 +66,9 @@ label WorldMap:
     
     menu:
         'Спросить: "Что случилось?" ':
-            call what_happend
+            call what_happend from _call_what_happend
         "Оглядеться и оценить обстановку":
-            call admire_vasya
+            call admire_vasya from _call_admire_vasya
     return
 
 label what_happend:
@@ -71,8 +81,9 @@ label admire_vasya:
     show forest_without_vasa
     show vas normal at left
     with fade
+    pause 2
     
-    "Вася смотрел на вас около 5 минут и не понимал, почему вы молчите"
+    "Вася смотрел на Вас около 5 минут и не понимал, почему вы молчите"
     
     vas "Привет, я очень рад тебя видеть!"
     
@@ -80,7 +91,7 @@ label admire_vasya:
 
     menu:
         'Спросить: "Что случилось?" ':
-            call what_happend
+            call what_happend from _call_what_happend_1
     return
 
 # Chapter 1.2
@@ -98,9 +109,9 @@ label BrokenCart:
     vas "Как ты думаешь, какой вариант лучше?"
 
     menu:
-        "Изменить код, чтобы части от повозки искались сами, рядом в лесу":
-            call chapter1_2_code_game
-            vas "Мы хорошо постарались и исправили нужную функцию!"
+        "Исправить баг в коде повозки":
+            call chapter1_2_code_game from _call_chapter1_2_code_game
+            vas "Мы хорошо постарались и исправили нужную переменную!"
             "Выглядит надёжно, теперь вы можете отправляться дальше!"
         "Рядом лес! Просто сделаем новое колесо, да и все!":
             $ coder_points -= 0.2
@@ -108,7 +119,7 @@ label BrokenCart:
             vas "Выглядит вроде надежно, можем, наверное, отправляться дальше..."
         "Повозка сможет ехать и на трех колесах, зачем ей четвертое?":
             "Странно, но это сработало."
-            call three_wheeled_carts
+            call three_wheeled_carts from _call_three_wheeled_carts
     return
 
 label chapter1_2_code_game:
@@ -127,9 +138,9 @@ label chapter1_2_code_game:
 label three_wheeled_carts:
     vas "Выглядит не очень надежно. Давай все-таки попробуем другой способ?"
     menu:
-        "Изменить код, чтобы части от повозки искались сами, рядом в лесу":
-            call chapter1_2_code_game
-            "Мы хорошо постарались и исправили нужную функцию!"
+        "Исправить баг в коде повозки":
+            call chapter1_2_code_game from _call_chapter1_2_code_game_1
+            "Мы хорошо постарались и исправили нужную переменную!"
         "Рядом лес! Просто сделаем новое колесо, да и все!":
             if coder_points >= 0.2:
                 $ coder_points -= 0.2
@@ -144,7 +155,7 @@ label CartIsFixed:
         "Поехали дальше!":
             return
         "Куда мы отправляемя и зачем?":
-            call chapter1_3_where_to
+            call chapter1_3_where_to from _call_chapter1_3_where_to
     return
 
 label chapter1_3_where_to:
@@ -158,6 +169,23 @@ label chapter1_3_where_to:
             vas "Когда доедем до деревни, можешь спросить у старосты"
     "Вы поехали дальше..."
     return
+
+
+# chapter 2.1
+label ComingOfKaseki:
+    scene blank
+    with fade
+    "Вы ехали, пока не наткнулись на развилку с деревянным домиком."
+    "Из домика вышел немолодой мужчина."
+    menu:
+        "Остановится у домика и послушать мужчину":
+            "Вы остановились. У Вас завязался диалог."
+    show dummy at left
+    "???" "Приветствую, путники."
+    kas "Я слежу за этим домом, меня зовут Касеки."
+    kas "Как вас зовут? Куда вы направляйтесь?"
+    return
+
 
 label variables:
     $ coder_points = 0.0
