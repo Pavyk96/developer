@@ -207,34 +207,27 @@ init:
 
 screen choice(items):
     style_prefix "choice"
-    default card_toggle = False
-    default card_shirts_list = []
-    default card_image = ""
-    default textField_text = ""
-
-
-
-    $ card_shirts_list = card_shirts.split(',')
     
     if len(items) > 3:
         python:
             raise ValueError('Too many options were given.')
     
+    $ card_shirt = card_shirts.split(' | ');
     if card_shirts == "":
         hbox:
             for i in items:
                 textbutton i.caption action i.action
     else:
         hbox:
-            for i in items:
+            for i in range(len(items)):
                 button:
-                    # hovered SetVariable("textField_text", i.caption)
-                    # unhovered SetVariable("textField_text", "")
-                    minimum 466, 733
-                    idle_background "images/cards/[card_shirts].png"
-                    hover_background "images/cards/eyes.png"
-                    text i.caption align 0.5, 0.5
-                    action NullAction()
+                    style_prefix "choice_button"
+                    minimum 464, 732
+                    idle_background "images/cards/" + card_shirt[i] + ".png"
+                    # hover_background "images/cards/shirt.png"
+                    hover_background "images/cards/" + card_shirt[i] + ".png"
+                    text items[i].caption align 0.5, 0.08
+                    action items[i].action
 
 
 style choice_hbox is hbox
@@ -243,9 +236,8 @@ style choice_button_text is button_text
  
 style choice_hbox:
     xalign 0.5
-    ypos 405
+    ypos 500
     yanchor 0.5
-
     spacing gui.choice_spacing
 
 style choice_button is default:
@@ -408,7 +400,6 @@ style main_menu_version is main_menu_text
 style main_menu_frame:
     xsize 420
     yfill True
-
     background "gui/overlay/main_menu.png"
 
 style main_menu_vbox:
