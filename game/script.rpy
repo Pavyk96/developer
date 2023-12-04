@@ -8,12 +8,11 @@ define kas = Character("Касеки", color="#fbff00ff")
 # background images
 image portal = im.Scale("bg/portal.png", 1920, 1080)
 image blank = im.Scale("bg/blank background.jpg", 1920, 1080)
-image forest_without_vasa = im.Scale("bg/forest_without_vasa.png", 1920, 1080)
 
 # character sprites
 image dummy = im.Scale("character/dummy.png.", 768, 768)
+image kas normal = im.Scale("SecondChapter/old man.png.", 328, 808)
 image vas normal = im.Scale("FirstChapter/vasya.png.", 326, 805)
-image kas normal = im.Scale("SecondChapter/kaseki.png.", 326, 805) #нужен спрайт
 image vasya_at_the_computer = im.Scale("bg/Vasya at the computer.png", 1920, 1080)
 image vasya_at_the_computer_surprised = im.Scale("bg/Vasya at the computer with a surprised face.png", 1920, 1080)
 
@@ -23,6 +22,8 @@ image goblin = im.Scale("mobs/goblin.png.", 768, 768) #нужен спрайт
 # enviroment sprites
 image forest_and_road_purple_wheel_with_vasya = im.Scale("FirstChapter/forest and road final without wheel.png", 1920, 1080) 
 image forest_and_road_normal_with_vasya = im.Scale("FirstChapter/forest and road final.png", 1920, 1080)
+image forest_without_vasa = im.Scale("bg/forest_without_vasa.png", 1920, 1080)
+image kasekiHouse = im.Scale("SecondChapter/home.png", 1920, 1080)
 image dungeon_at_day = im.Scale("ThirdChapter/dungeon_at_day.jpg", 1920, 1080) #нужен спрайт
 image dungeon_at_nigth = im.Scale("ThirdChapter/dungeon_at_nigth.jpg", 1920, 1080) #нужен спрайт
 image vilage_gate = im.Scale("ThirdChapter/vilage_gate.png", 1920, 1080) #нужен спрайт
@@ -90,6 +91,7 @@ label ThirdChapter:
             call SecondPartLongWay
             call NexToGate
         call ChoosingSolution 
+    return
 
 # map section. Chapter 1.1      
 label WorldMap:
@@ -97,7 +99,8 @@ label WorldMap:
     with fade
     show vas normal at left
     "Перед собой вы видите фэнтезийный мир и озадаченного Васю"
-    
+   
+    $ card_shirts = "question_mark | eyes"
     menu:
         'Спросить: "Что случилось?" ':
             call what_happend from _call_what_happend
@@ -114,14 +117,13 @@ label what_happend:
 label admire_vasya:
     show forest_without_vasa
     show vas normal at left
-    with fade
     pause 2
     
     "Вася смотрел на Вас около 5 минут и не понимал, почему вы молчите"
     
     vas "Привет, я очень рад тебя видеть!"
     
-    vas "Можешь мне помочь пожалуйста?"
+    vas "Можешь мне помочь, пожалуйста?"
 
     menu:
         'Спросить: "Что случилось?" ':
@@ -130,9 +132,10 @@ label admire_vasya:
 
 # Chapter 1.2
 label BrokenCart:
-    scene forest_and_road_purple_wheel_with_vasya with fade
+    scene forest_and_road_purple_wheel_with_vasya
     vas "У повозки пропало куда-то колесо."
-    vas "Можешь мне помочь пожалуйста?"
+    vas "Можешь мне помочь, пожалуйста?"
+    $ card_shirts = "head_and_question_mark"
     menu: 
         "Подумать над решением этой проблемы":
             "Хм{w=0.2}.{w=0.2}.{w=0.2}.{w=0.2}{nw}"
@@ -142,6 +145,7 @@ label BrokenCart:
     
     vas "Как ты думаешь, какой вариант лучше?"
 
+    $ card_shirts = 'magnier | tools | wooden_wheel'
     menu:
         "Исправить баг в коде повозки":
             call chapter1_2_code_game from _call_chapter1_2_code_game
@@ -160,6 +164,7 @@ label chapter1_2_code_game:
     $ coder_points += 5
     
     while(True):
+        $ card_shirts = 'shirt | shirt | shirt'
         menu:
             "class Cart(): \n ... \n    numberOfWheels = 1":
                 "Неправильно, сколько всего колес у повозки?"
@@ -168,7 +173,7 @@ label chapter1_2_code_game:
             "class Cart(): \n ... \n    numberOfWheels = 4":
                     "Правильно, теперь у повозки 4 колеса!"
                     return
-
+                            
 label three_wheeled_carts:
     vas "Выглядит не очень надежно. Давай все-таки попробуем другой способ?"
     menu:
@@ -185,6 +190,8 @@ label three_wheeled_carts:
 # Chapter 1.3 
 label CartIsFixed:
     scene forest_and_road_normal_with_vasya
+
+    $ card_shirts = 'way_to_forest | question_mark'
     menu:
         "Поехали дальше!":
             return
@@ -196,6 +203,8 @@ label chapter1_3_where_to:
     vas "Нам нужно доставить снаряжение для авантюристов в деревню Гудзё"
     vas "Потому что около неё появилось данж с монстрами и никто не вызывался помочь, кроме нас"
     vas "Поэтому за эту срочную задачу от гильдии взялись только мы, рискуя своими жизнями"
+    
+    $ card_shirts = 'mouth'
     menu:
         "Почему им нужна наша помощь? Почему они не справляются сами?":
             vas "Не знаю, ахахахаха"
@@ -206,14 +215,16 @@ label chapter1_3_where_to:
 
 # chapter 2.1
 label ComingOfKaseki:
-    scene blank
+    scene kasekiHouse
     with fade
     "Вы ехали, пока не наткнулись на развилку с деревянным домиком."
     "Из домика вышел немолодой мужчина."
+    show kas normal at left with Dissolve(.3)
+
+    $ card_shirts = 'ear'
     menu:
         "Остановится у домика и послушать мужчину":
             "Вы остановились. У Вас завязался диалог."
-    show dummy at left
     "???" "Приветствую, путники."
     kas "Я слежу за этим домом, меня зовут Касеки."
     kas "Как вас зовут? Куда вы направляйтесь?"
@@ -221,8 +232,9 @@ label ComingOfKaseki:
 
 # chapter 2.2
 label AskForDirectionsToTheVillage:
-    show dummy at right
+    show kas normal at right
     "Рядом находился данж {w=1.5} {nw}"
+    $ card_shirts = 'mouth | question_mark'
     menu:
         "Представится и спросить, какой путь ведет до деревни Гудзё?":
             return
@@ -239,6 +251,8 @@ label AboutKaseki:
     kas "А еще мне передали сообщение из деревни, что они попросили помощи из города, и мне надо будет помочь добраться путешественникам до деревни."
     kas "Это вы те самые путешественники?"
     vas "Да, мы доставляем вооружение для авантюристов из деревни!"
+
+    $ card_shirts = 'mouth'
     menu:
         "Представится и спросить, какой путь ведет до деревни Гудзё?":
             return
@@ -249,6 +263,8 @@ label ChooseDirection:
     kas "Можно поехать прямо, но тот путь может оказать не безопасным."
     kas "Можно поехать направо, тот путь длинный и более безопасный."
     kas "Но на этом пути много развилок, без человека знающего путь, можно потратить много времени."
+    
+    $ card_shirts = 'dangerous_place | road'
     menu:
         "Поехать прямо.":
             "Вы хотели отправиться прямо, но есть одно но..."
@@ -264,9 +280,23 @@ label ChooseDirection:
             return
     return
 
+# 
+# 
+# 
+# 
+# 
+# 
+# call WayAtNight
+# call Bug
+# call ProblemWithNight
+# call NexToGate
+# call ChoosingSolution
+
+# TODO: deal with card shirts and sprites HERE
 # chapter 3.1
 label TheWayToDange:
     scene dungeon_at_day
+    $ card_shirts = 'head_and_question_mark | head_and_question_mark | head_and_question_mark'
     menu:
         "Просто проехать, вдруг повезет.":
             show goblin at right with Dissolve(.3)
@@ -302,25 +332,28 @@ label WayAtNight:
 
 label Bug:
     vas "Что будем делать?"
+
+    $ card_shirts = 'head_and_question_mark | tools'
     menu:
         "Оставим эту полезную фичу.":
             "Интересное решение, но в этом случае оно не сработает."
             call Bug
         "Исправить ошибку":
             "Вы стали думать над решением этой проблемы."
-            vas "Ошибка показывает, что в строчке кода находится синтаксическая ошибка."
+            vas "Exception показывает, что в строчке кода находится ошибка."
             vas "Помоги мне найти правильный ответ, пожалуйста..."
     return
 
 label ProblemWithNight:
+        $ card_shirts = 'shirt | shirt | shirt'
         menu:
-            "image.SetAttributes(new ImageAttributes().SetGamma(10f, ColorAdjustTypeBitmap));":
+            "public static class Cave\n var nightTime = 1000":
                 "Неправильно, попробуйте еще раз."
                 call ProblemWithNight
-            "ImageSetAttributes(new ImageAttributes.SetGamma(2.2f, ColorAdjustType.Bitmap));":
+            "private static class CAVEE\n var nightTime = 1000":
                 "Неправильно, попробуйте еще раз."
                 call ProblemWithNight
-            "image.SetAttributes(new ImageAttributes().SetGamma(2.2f, ColorAdjustType.Bitmap));":
+            "private static classe Cave\n var nightTime = 1000":
                 "Правильно, теперь ночью стало темно!"
                 vas "Проблема решена!"
                 return
@@ -337,6 +370,8 @@ label NexToGate:
 
 label ChoosingSolution:
     "var a = 2 / 3 * 5;"
+
+    $ card_shirts = 'shirt | shirt | shirt'
     menu:
         "Double":
             "Неверно... Попробуйте другой ответ."
@@ -344,20 +379,23 @@ label ChoosingSolution:
         "Long":
             "Неверно... Попробуйте другой ответ."
             call ChoosingSolution
-        "Float":
+        "int":
             return
     return
 
 # Chapter 3.2
 label Right:
+
+    $ card_shirts = 'mouth | head_and_question_mark | eyes'
     menu:
         "Спросить у Касеки путь.":
             "Касеки начал вам рассказывать, как добраться до деревни."
             kas "Я вас скажу, куда нужно поворачивать на развилках, а вы запоминайте, чтобы быстрее добраться до деревни."
             kas "На пути вам встретится, пять развилок и два моста."
-            kas "Право, лево, мост, прямо, лево, мост, прямо"
+            kas "Вправо, влево, мост, прямо, влево, мост, прямо"
             kas "Если вы пройдете так, на всех развилках, то вы попадете в деревню, если сойдете с пути, то ничего страшного, вы попадете к речке."
             vas "Хорошо, мы вас поняли, большое спасибо!"
+            $ card_shirts = 'mouth'
             menu:
                 "Тогда, поехали!":
                     scene forest with fade
@@ -365,6 +403,7 @@ label Right:
             show vas normal at left with Dissolve(.5)
             vas "Какой путь нам лучше выбрать?"
             $ withKaseki = False
+            return
         "Взять с собой в путь Касеки.":
             "Касеки согласился вам показать путь до деревни."
             scene river_without_bridge with fade
@@ -381,37 +420,46 @@ label Right:
 
     
 
-
 label RroadToVillage:
-    menu:
-        "Влево.":
-            "Не правильно, вы потеряли время на неверный путь."
-        "Вправо.":
-            "Правильный путь, вы поехали дальше."
+    $ card_shirts = 'left_arrow | right_arrow'
+    $ rightChoice = False
+    while(not rightChoice):
+        menu:
+            "Влево.":
+                "Не правильно, вы потеряли время на неверный путь."
+            "Вправо.":
+                "Правильный путь, вы поехали дальше."
+                $ rightChoice = True
     vas "Какой путь нам лучше выбрать?"
-    menu:
-        "Влево.":
-            "Правильный путь, вы поехали дальше."
-        "Вправо.":
-            "Не правильно, вы потеряли время на неверный путь."
-    "Вы наткнулись на речку, где должен был быть мостик, но по какой-то причине его нету и показывается странную ошибку."
-    vas "Что-то странное, тут должен быть мостик, но его нету."
+    
+    $ card_shirts = 'left_arrow | right_arrow'
+    $ rightChoice = False
+    while(not rightChoice):
+        menu:
+            "Влево.":
+                "Правильный путь, вы поехали дальше."
+                $ rightChoice = True    
+            "Вправо.":
+                "Не правильно, вы потеряли время на неверный путь."
+    "Вы наткнулись на речку, где должен был быть мостик, но по какой-то причине его нет и показывается странную ошибку."
+    vas "Что-то странное, тут должен быть мостик, но его нет."
     vas "Тут ошибка, показывает что с кодом игры что-то не так..."
     vas "Нужно правильный вариант кода, при котором мостик появится."
     scene river_without_bridge with fade
     return
 
-
+# TODO: deal with menu section here.
 label ProblemWithBridge:
+    $ card_shirts = 'shirt | shirt | shirt'
     menu:
-        "GameObject Bridge = Instantiate(bridgePrefab, new Vector3(xyz), Quaternion.identity);":
+        "GameeeObject Bridge = Instantiate(bridgePrefab, new Vector3(xyz), Quaternion.identity);":
             "К сожалению, не правильно, попробуйте еще раз."
             call ProblemWithBridge
         "GameObject Bridge = Instantiate(bridgePrefab, new Vector3(x, y, z), Quaternion.identity);":
             "Правильно, вы нашли правильный код!"
             vas "Проблема решена!"
             vas "Теперь можно отправляться дальше!"
-        "GameObject Bridge Instantiate(bridgePrefab, new Vector3(x, y, z), QuaternionIdentity);":
+        "GameObject Bridge\n Instantiate(bridgePrefab, new Vector3(x, y, z), QuaternionIdentity);":
             "К сожалению, не правильно, попробуйте еще раз."
             call ProblemWithBridge
     return
@@ -420,25 +468,40 @@ label SecondPartLongWay:
     scene forest with fade
     show vas normal at left with Dissolve(.5)
     vas "Какой путь нам лучше выбрать?"
-    menu:
-        "Прямо":
-            "Правильный путь, вы поехали дальше."
-        "Лево":
-            "Не правильно, вы потеряли время на неверный путь."
+    
+    $ card_shirts = 'up_arrow | left_arrow'
+    $ rightChoice = False
+    while(not rightChoice):
+        menu:
+            "Прямо":
+                "Правильный путь, вы поехали дальше."
+                $ rightChoice = True
+            "Влево":
+                "Не правильно, вы потеряли время на неверный путь."
     vas "Какой путь нам лучше выбрать?"
-    menu:
-        "Лево":
-            "Правильный путь, вы поехали дальше."
-        "Право":
-            "Не правильно, вы потеряли время на неверный путь."
+    
+    $ card_shirts = 'left_arrow | right_arrow'
+    $ rightChoice = False
+    while(not rightChoice):
+        menu:
+            "Влево":    
+                "Правильный путь, вы поехали дальше."
+                $ rightChoice = True
+            "вправо":
+                "Не правильно, вы потеряли время на неверный путь."
     vas "Какой путь нам лучше выбрать?"
-    menu:
-        "Прямо":
-            "Правильный путь, вы поехали дальше."
-        "Влево":
-            "Не правильно, вы потеряли время на неверный путь."
+    
+    $ card_shirts = 'up_arrow | left_arrow'
+    $ rightChoice = False
+    while(not rightChoice):
+        menu:
+            "Прямо":
+                "Правильный путь, вы поехали дальше."
+                $ rightChoice = True
+            "Влево":
+                "Не правильно, вы потеряли время на неверный путь."
 
-
+    return
 label SecondPartShortWay:
     "Вы ехали, пока не наткнулись на ворота деревни."
     vas "Теперь нужно открыть ворота, чтобы въехать в деревню."
