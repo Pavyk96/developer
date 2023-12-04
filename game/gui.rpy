@@ -149,7 +149,7 @@ define gui.dialogue_text_xalign = 0.0
 ## how buttons are displayed.
 
 ## The width and height of a button, in pixels. If None, Ren'Py computes a size.
-define gui.button_width = None
+define gui.button_width = 463
 define gui.button_height = None
 
 ## The borders on each side of the button, in left, top, right, bottom order.
@@ -206,15 +206,16 @@ define gui.quick_button_text_selected_color = gui.accent_color
 ##
 ## Choice buttons are used in the in-game menus.
 
-define gui.choice_button_width = 466
-define gui.choice_button_height = 733   
+define gui.choice_button_width = 463
+define gui.choice_button_height = 731   
 define gui.choice_button_tile = False
-define gui.choice_button_borders = Borders(10, 5, 10, 5)
+define gui.choice_button_borders = Borders(6, 6, 6, 6)
 define gui.choice_button_text_font = gui.menu_font
 define gui.choice_button_text_size = gui.menu_text_size
 define gui.choice_button_text_xalign = 0.5
 define gui.choice_button_text_yalign = 0.5
-define gui.choice_button_text_idle_color = '#000000'
+define gui.choice_button_text_idle_color = '#343434'
+# define gui.choice_button_text_hover_color = "#000000"
 define gui.choice_button_text_hover_color = "#000000"
 define gui.choice_button_text_insensitive_color = '#8888887f'
 
@@ -448,7 +449,7 @@ init python:
         ## Change the size and spacing of various things.
         gui.slider_size = 54
 
-        gui.choice_button_width = 1860
+        gui.choice_button_width = 731
         gui.choice_button_text_size = 45
 
         gui.navigation_spacing = 30
