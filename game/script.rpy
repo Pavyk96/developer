@@ -4,6 +4,7 @@
 
 define vas = Character("Вася", color="#00e4fd")
 define kas = Character("Касеки", color="#fbff00ff")
+define umi = Character("Юми", color="#e600ffff")
 
 # background images
 image portal = im.Scale("bg/portal.png", 1920, 1080)
@@ -44,6 +45,9 @@ label start:
 
     # third chapter
     call ThirdChapter
+
+    # fourth chapter
+    call FourthChapter
     return
 
 
@@ -91,6 +95,11 @@ label ThirdChapter:
             call SecondPartLongWay
             call NexToGate
         call ChoosingSolution 
+    return
+
+label FourthChapter:
+    call ChoiseInVillage
+    call MeetingWithUmi 
     return
 
 # map section. Chapter 1.1      
@@ -280,18 +289,6 @@ label ChooseDirection:
             return
     return
 
-# 
-# 
-# 
-# 
-# 
-# 
-# call WayAtNight
-# call Bug
-# call ProblemWithNight
-# call NexToGate
-# call ChoosingSolution
-
 # TODO: deal with card shirts and sprites HERE
 # chapter 3.1
 label TheWayToDange:
@@ -299,7 +296,8 @@ label TheWayToDange:
     $ card_shirts = 'head_and_question_mark | head_and_question_mark | head_and_question_mark'
     menu:
         "Просто проехать, вдруг повезет.":
-            show goblin at right with Dissolve(.3)
+            # show goblin at right with Dissolve(.3)
+            show goblin at right with vpunch
             "Не удачное решение, на пути видны монстры."
             show vas normal at left with Dissolve(.5)
             vas "Это будет слишком опасно, давай выберем другое решение."
@@ -308,7 +306,8 @@ label TheWayToDange:
             call TheWayToDange
         "Поедем медленно, но тихо.":
             "Не удачное решение, на пути видны монстры."
-            show goblin at right with Dissolve(.3)
+            # show goblin at right with Dissolve(.3)
+            show goblin at right with vpunch
             show vas normal at left with Dissolve(.5)
             vas "Мне кажется, это будет хорошей идеей, если мы отправимся ночью, как думаешь?"
             hide goblin with easeoutright
@@ -367,7 +366,6 @@ label NexToGate:
     vas "Нужно определить возвращаемый тип выражения, которое написано рядом с воротами."
     return
         
-
 label ChoosingSolution:
     "var a = 2 / 3 * 5;"
 
@@ -417,8 +415,6 @@ label Right:
             vas "Если мы выберем этот вариант, мы потеряем много времени, давай выберем другое решение?"
             call Right
     return
-
-    
 
 label RroadToVillage:
     $ card_shirts = 'left_arrow | right_arrow'
@@ -508,8 +504,70 @@ label SecondPartShortWay:
     vas "Сейчас они закрыты, но они открываются, если решить маленькую загадку."
     return
 
+# chapter 4.1
+label ChoiseInVillage:
+    scene blank with pixellate
+    show kas normal at right
+    show vas normal at left
+    "Вы зашли в деревню и начали искать гильдию."
+    kas "Здесь наши пути расходятся, я выполнил свое задание. Удачи вам."
+
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    menu:
+        "Вам тоже удачи!":
+            "Вы отправились искать гильдию."
+            vas "Теперь нам нужно найти гильдию, нас там уже ждут."
+        "Постойте пожалуйста, скажите как нам найти гильдию?":
+            kas "На здании гильдии должен быть меч, поэтому отличительному знаку вы должны быстро найти ее."
+            vas "Все понял, надеюсь мы ее найдем, больше спасибо. Удачи вам."   
+    
+    hide kas
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    menu:
+        "Библиотека":
+            pass
+        "Мясная лавка":
+            pass
+        "Гильдия":
+            vas "Это гильдия! Идем!"
+            return
+    return
+
+# chapter 4.2
+label MeetingWithUmi:
+    scene blank with pixellate
+    show vas normal at center
+    "Вы зашли в здание, и оказались правы - это гильдия."
+    show vas normal at right with dissolve
+    vas "Нам нужно подойти к стойке администрации, чтобы сообщить, что мы уже прибыли."
+    "Вы подошли к стойке"
+    show dummy at left with dissolve
+    umi "Здравствуйте!" 
+    umi "Меня зовут Юми, я представитель гильдии."
+    umi "Зачем вы пришли?"
+    vas "Мы выполняем задание от вашей деревни. Доставляем магическое оружие для ваших авантюристов."
+    umi "Хорошо. Наверное вы устали с дороги, не хотите перекусить?"
+    
+    $ card_shirts = "dangerous_place | mouth"
+    menu:
+        "Отправиться в данж.":
+            return
+        "Перекусить.":
+            umi "Давайте перекусим"
+            call eat
+            vas "Хорошо поели! Теперь идем?"
+            $ card_shirts = "dangerous_place"
+            menu:
+                "Отправиться в данж":
+                    return
+    return
+label eat:
+    "IN DEVELOPMENT"
+    return
+
 label variables:
     $ coder_points = 0.0
+    $ card_shirts = ""
     return
 
 label end:
