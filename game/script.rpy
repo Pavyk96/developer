@@ -41,13 +41,13 @@ label start:
     call FirstChapter from _call_FirstChapter  
 
     # second chapter
-    call SecondChapter
+    call SecondChapter from _call_SecondChapter
 
     # third chapter
-    call ThirdChapter
+    call ThirdChapter from _call_ThirdChapter
 
     # fourth chapter
-    call FourthChapter
+    call FourthChapter from _call_FourthChapter
     return
 
 
@@ -70,36 +70,36 @@ label FirstChapter:
     return
 
 label SecondChapter:
-    call ComingOfKaseki
-    call AskForDirectionsToTheVillage
-    call ChooseDirection
+    call ComingOfKaseki from _call_ComingOfKaseki
+    call AskForDirectionsToTheVillage from _call_AskForDirectionsToTheVillage
+    call ChooseDirection from _call_ChooseDirection
     return
 
 label ThirdChapter:
     if (straight_or_right == "straight"):
-        call TheWayToDange
-        call WayAtNight
-        call Bug
-        call ProblemWithNight
-        call NexToGate
-        call ChoosingSolution
+        call TheWayToDange from _call_TheWayToDange
+        call WayAtNight from _call_WayAtNight
+        call Bug from _call_Bug
+        call ProblemWithNight from _call_ProblemWithNight
+        call NexToGate from _call_NexToGate
+        call ChoosingSolution from _call_ChoosingSolution
     else:
-        call Right
+        call Right from _call_Right
         if (withKaseki == False):
-            call RroadToVillage
-        call ProblemWithBridge
+            call RroadToVillage from _call_RroadToVillage
+        call ProblemWithBridge from _call_ProblemWithBridge
         if (withKaseki == True):
-            call SecondPartShortWay
-            call NexToGate
+            call SecondPartShortWay from _call_SecondPartShortWay
+            call NexToGate from _call_NexToGate_1
         else:
-            call SecondPartLongWay
-            call NexToGate
-        call ChoosingSolution 
+            call SecondPartLongWay from _call_SecondPartLongWay
+            call NexToGate from _call_NexToGate_2
+        call ChoosingSolution from _call_ChoosingSolution_1 
     return
 
 label FourthChapter:
-    call ChoiseInVillage
-    call MeetingWithUmi 
+    call ChoiseInVillage from _call_ChoiseInVillage
+    call MeetingWithUmi from _call_MeetingWithUmi 
     return
 
 # map section. Chapter 1.1      
@@ -248,7 +248,7 @@ label AskForDirectionsToTheVillage:
         "Представится и спросить, какой путь ведет до деревни Гудзё?":
             return
         "Спросить, что Касеки делает в таком опасном месте?":
-            call AboutKaseki
+            call AboutKaseki from _call_AboutKaseki
     return
 
 label AboutKaseki:
@@ -303,7 +303,7 @@ label TheWayToDange:
             vas "Это будет слишком опасно, давай выберем другое решение."
             hide goblin with easeoutright
             hide vas normal with easeoutleft
-            call TheWayToDange
+            call TheWayToDange from _call_TheWayToDange_1
         "Поедем медленно, но тихо.":
             "Не удачное решение, на пути видны монстры."
             # show goblin at right with Dissolve(.3)
@@ -312,7 +312,7 @@ label TheWayToDange:
             vas "Мне кажется, это будет хорошей идеей, если мы отправимся ночью, как думаешь?"
             hide goblin with easeoutright
             hide vas normal with easeoutleft
-            call TheWayToDange
+            call TheWayToDange from _call_TheWayToDange_2
         "Дождаться ночи и отправится в путь.":
             "Вот этот метод может сработать, надо попробовать. Вы стали ожидать ночи."
             scene dungeon_at_nigth with fade
@@ -336,7 +336,7 @@ label Bug:
     menu:
         "Оставим эту полезную фичу.":
             "Интересное решение, но в этом случае оно не сработает."
-            call Bug
+            call Bug from _call_Bug_1
         "Исправить ошибку":
             "Вы стали думать над решением этой проблемы."
             vas "Exception показывает, что в строчке кода находится ошибка."
@@ -348,10 +348,10 @@ label ProblemWithNight:
         menu:
             "public static class Cave\n var nightTime = 1000":
                 "Неправильно, попробуйте еще раз."
-                call ProblemWithNight
+                call ProblemWithNight from _call_ProblemWithNight_1
             "private static class CAVEE\n var nightTime = 1000":
                 "Неправильно, попробуйте еще раз."
-                call ProblemWithNight
+                call ProblemWithNight from _call_ProblemWithNight_2
             "private static classe Cave\n var nightTime = 1000":
                 "Правильно, теперь ночью стало темно!"
                 vas "Проблема решена!"
@@ -373,10 +373,10 @@ label ChoosingSolution:
     menu:
         "Double":
             "Неверно... Попробуйте другой ответ."
-            call ChoosingSolution
+            call ChoosingSolution from _call_ChoosingSolution_2
         "Long":
             "Неверно... Попробуйте другой ответ."
-            call ChoosingSolution
+            call ChoosingSolution from _call_ChoosingSolution_3
         "int":
             return
     return
@@ -413,7 +413,7 @@ label Right:
         "Просто поехать куда глаза глядят.":
             "Мне кажется это не самый лучший вариант, мы можем запутаться."
             vas "Если мы выберем этот вариант, мы потеряем много времени, давай выберем другое решение?"
-            call Right
+            call Right from _call_Right_1
     return
 
 label RroadToVillage:
@@ -450,14 +450,14 @@ label ProblemWithBridge:
     menu:
         "GameeeObject Bridge = Instantiate(bridgePrefab, new Vector3(xyz), Quaternion.identity);":
             "К сожалению, не правильно, попробуйте еще раз."
-            call ProblemWithBridge
+            call ProblemWithBridge from _call_ProblemWithBridge_1
         "GameObject Bridge = Instantiate(bridgePrefab, new Vector3(x, y, z), Quaternion.identity);":
             "Правильно, вы нашли правильный код!"
             vas "Проблема решена!"
             vas "Теперь можно отправляться дальше!"
         "GameObject Bridge\n Instantiate(bridgePrefab, new Vector3(x, y, z), QuaternionIdentity);":
             "К сожалению, не правильно, попробуйте еще раз."
-            call ProblemWithBridge
+            call ProblemWithBridge from _call_ProblemWithBridge_2
     return
 
 label SecondPartLongWay:
@@ -525,9 +525,19 @@ label ChoiseInVillage:
     $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
     menu:
         "Библиотека":
-            pass
+            vas "Хмм, библиотека пустует... В ней нет посетителей..."
+            vas "Но тут есть записка! Давайте почитаем, что тут написано!"
+            """Посетителей становится все меньше, потому что все боятся заходить в нашу деревню...
+            Я считаю, что это из-за этих проклятых, очень сильных гоблинов... 
+            Наша библиотека вынуждена закрыться..."""
+            # picture
         "Мясная лавка":
-            pass
+            vas "Лавка выглядит заброшенной..."
+            vas "Но тут есть какая-то записка! Давайте прочитаем, что тут написано!"
+            """***Наша лавка пришла в упадок...
+            Все из-за сильных гоблинов, которые воруют наш скот...
+            По этой причине мы вынуждены закрыться...
+            Всего хорошего"""
         "Гильдия":
             vas "Это гильдия! Идем!"
             return
@@ -554,7 +564,7 @@ label MeetingWithUmi:
             return
         "Перекусить.":
             umi "Давайте перекусим"
-            call eat
+            call eat from _call_eat
             vas "Хорошо поели! Теперь идем?"
             $ card_shirts = "dangerous_place"
             menu:
