@@ -3,8 +3,8 @@
     $ config.keymap['skip'].remove('K_RCTRL')
 
 define vas = Character("Вася", color="#00e4fd")
-define kas = Character("Касеки", color="#fbff00ff")
-define umi = Character("Юми", color="#e600ffff")
+define petr = Character("Дед Петр", color="#fbff00ff")
+define nas = Character("Настя", color="#e600ffff")
 
 # background images
 image portal = im.Scale("bg/portal.png", 1920, 1080)
@@ -12,7 +12,7 @@ image blank = im.Scale("bg/blank background.jpg", 1920, 1080)
 
 # character sprites
 image dummy = im.Scale("character/dummy.png.", 768, 768)
-image kas normal = im.Scale("SecondChapter/old man.png.", 328, 808)
+image petr normal = im.Scale("SecondChapter/old man.png.", 328, 808)
 image vas normal = im.Scale("FirstChapter/vasya.png.", 326, 805)
 image vasya_at_the_computer = im.Scale("bg/Vasya at the computer.png", 1920, 1080)
 image vasya_at_the_computer_surprised = im.Scale("bg/Vasya at the computer with a surprised face.png", 1920, 1080)
@@ -24,7 +24,7 @@ image goblin = im.Scale("mobs/goblin.png.", 768, 768) #нужен спрайт
 image forest_and_road_purple_wheel_with_vasya = im.Scale("FirstChapter/forest and road final without wheel.png", 1920, 1080) 
 image forest_and_road_normal_with_vasya = im.Scale("FirstChapter/forest and road final.png", 1920, 1080)
 image forest_without_vasa = im.Scale("bg/forest_without_vasa.png", 1920, 1080)
-image kasekiHouse = im.Scale("SecondChapter/home.png", 1920, 1080)
+image petrHouse = im.Scale("SecondChapter/home.png", 1920, 1080)
 image dungeon_at_day = im.Scale("ThirdChapter/dungeon_at_day.jpg", 1920, 1080) #нужен спрайт
 image dungeon_at_nigth = im.Scale("ThirdChapter/dungeon_at_nigth.jpg", 1920, 1080) #нужен спрайт
 image vilage_gate = im.Scale("ThirdChapter/vilage_gate.png", 1920, 1080) #нужен спрайт
@@ -70,7 +70,7 @@ label FirstChapter:
     return
 
 label SecondChapter:
-    call ComingOfKaseki from _call_ComingOfKaseki
+    call ComingOfPetr
     call AskForDirectionsToTheVillage from _call_AskForDirectionsToTheVillage
     call ChooseDirection from _call_ChooseDirection
     return
@@ -81,25 +81,24 @@ label ThirdChapter:
         call WayAtNight from _call_WayAtNight
         call Bug from _call_Bug
         call ProblemWithNight from _call_ProblemWithNight
-        call NexToGate from _call_NexToGate
+        call NextToGate
         call ChoosingSolution from _call_ChoosingSolution
     else:
         call Right from _call_Right
-        if (withKaseki == False):
-            call RroadToVillage from _call_RroadToVillage
+        if (withPetr == False):
+            call RoadToVillage
         call ProblemWithBridge from _call_ProblemWithBridge
-        if (withKaseki == True):
+        if (withPetr == True):
             call SecondPartShortWay from _call_SecondPartShortWay
-            call NexToGate from _call_NexToGate_1
         else:
             call SecondPartLongWay from _call_SecondPartLongWay
-            call NexToGate from _call_NexToGate_2
+            call NextToGate
         call ChoosingSolution from _call_ChoosingSolution_1 
     return
 
 label FourthChapter:
     call ChoiseInVillage from _call_ChoiseInVillage
-    call MeetingWithUmi from _call_MeetingWithUmi 
+    call MeetingWithNas 
     return
 
 # map section. Chapter 1.1      
@@ -118,7 +117,7 @@ label WorldMap:
     return
 
 label what_happend:
-    vas "Я зашел в свою игру, но тут слишком много багов."
+    vas "Я попал в свою игру, но тут слишком много багов."
     show vas normal
     vas "Помоги, пожалуйста!"
     return
@@ -142,7 +141,7 @@ label admire_vasya:
 # Chapter 1.2
 label BrokenCart:
     scene forest_and_road_purple_wheel_with_vasya
-    vas "У повозки пропало куда-то колесо."
+    vas "У повозки куда-то пропало колесо."
     vas "Можешь мне помочь, пожалуйста?"
     $ card_shirts = "head_and_question_mark"
     menu: 
@@ -185,20 +184,29 @@ label chapter1_2_code_game:
                             
 label three_wheeled_carts:
     vas "Выглядит не очень надежно. Давай все-таки попробуем другой способ?"
+    
+    $ card_shirts = 'magnier | tools | wooden_wheel'
     menu:
         "Исправить баг в коде повозки":
             call chapter1_2_code_game from _call_chapter1_2_code_game_1
             "Мы хорошо постарались и исправили нужную переменную!"
         "Рядом лес! Просто сделаем новое колесо, да и все!":
-            if coder_points >= 0.2:
-                $ coder_points -= 0.2
+            $ coder_points -= 0.2
             "Это было долго, мы потеряли много времени, но справились!" 
             vas "Выглядит вроде надежно, можем, наверное, отправляться дальше..."
+        "Оставить все как есть":
+            vas "Ну ладно, может само починится"
+            $ withoutWheel = True
+            $ coder_points -= 5
+    
     return
 
 # Chapter 1.3 
 label CartIsFixed:
-    scene forest_and_road_normal_with_vasya
+    if (not withoutWheel):
+        scene forest_and_road_normal_with_vasya
+    else:
+        scene forest_and_road_purple_wheel_with_vasya
 
     $ card_shirts = 'way_to_forest | question_mark'
     menu:
@@ -209,9 +217,9 @@ label CartIsFixed:
     return
 
 label chapter1_3_where_to:
-    vas "Нам нужно доставить снаряжение для авантюристов в деревню Гудзё"
-    vas "Потому что около неё появилось данж с монстрами и никто не вызывался помочь, кроме нас"
-    vas "Поэтому за эту срочную задачу от гильдии взялись только мы, рискуя своими жизнями"
+    vas "Нам нужно доставить снаряжение для авантюристов в деревню неподалеку"
+    vas "Около неё появился данж с монстрами, и никто не вызывался помочь, кроме нас"
+    vas "Поэтому за эту срочную задачу от гильдии взялись только мы, рискуя своими жизнями."
     
     $ card_shirts = 'mouth'
     menu:
@@ -223,62 +231,61 @@ label chapter1_3_where_to:
     return
 
 # chapter 2.1
-label ComingOfKaseki:
-    scene kasekiHouse
+label ComingOfPetr:
+    scene petrHouse
     with fade
     "Вы ехали, пока не наткнулись на развилку с деревянным домиком."
     "Из домика вышел немолодой мужчина."
-    show kas normal at left with Dissolve(.3)
+    show petr normal at left with Dissolve(.3)
 
     $ card_shirts = 'ear'
     menu:
-        "Остановится у домика и послушать мужчину":
+        "Остановиться у домика и послушать, что скажет мужчина":
             "Вы остановились. У Вас завязался диалог."
-    "???" "Приветствую, путники."
-    kas "Я слежу за этим домом, меня зовут Касеки."
-    kas "Как вас зовут? Куда вы направляйтесь?"
+    "???" "Приветствую Вас, путники."
+    petr "Я слежу за этим домом, меня зовут Петр Петрович, но вы можете называть меня Дед Петр."
+    petr "Как вас зовут? Куда вы направляетесь?"
     return
 
 # chapter 2.2
 label AskForDirectionsToTheVillage:
-    show kas normal at right
-    "Рядом находился данж {w=1.5} {nw}"
+    show petr normal at right
     $ card_shirts = 'mouth | question_mark'
     menu:
-        "Представится и спросить, какой путь ведет до деревни Гудзё?":
+        "Представиться и спросить, какой путь ведет до деревни":
             return
-        "Спросить, что Касеки делает в таком опасном месте?":
-            call AboutKaseki from _call_AboutKaseki
+        "Спросить, что Дед Петр делает в таком опасном месте":
+            call AboutPetr
     return
 
-label AboutKaseki:
-    "Касеки начал вам объяснять."
-    kas "Я был смотрителем этой шахты, но недавно тут появились гоблины."
-    kas "Говорят, что в пещере появился Вождь Гоблинов, и он присвоил себе с легкостью это место, потому что у него не было охраны."
-    kas "Ведь наша деревня не такая большая, и не может позволить себе охранников."
-    kas "А я не ушел из этого дома, потому что я уже, как видите, стар, мне некуда пойти, тем более это мой любимый дом..."
-    kas "А еще мне передали сообщение из деревни, что они попросили помощи из города, и мне надо будет помочь добраться путешественникам до деревни."
-    kas "Это вы те самые путешественники?"
+label AboutPetr:
+    "Дед Петр начал вам объяснять."
+    petr "Я был смотрителем шахты, но недавно тут появились гоблины."
+    petr "Говорят, что в пещере появился Вождь Гоблинов. Он с легкостью присвоил себе это место, ведь там не было охраны."
+    petr "Наша деревня не такая большая, мы не можем позволить себе охранников."
+    petr "Я не ушел из этого дома, потому что я уже стар, мне некуда пойти, тем более это мой любимый дом..."
+    petr "А еще мне передали, что помощь для деревни уже в пути. Сказали, что мне надо помочь путешественникам добраться до деревни."
+    petr "Это вы те самые путешественники?"
     vas "Да, мы доставляем вооружение для авантюристов из деревни!"
 
     $ card_shirts = 'mouth'
     menu:
-        "Представится и спросить, какой путь ведет до деревни Гудзё?":
+        "Представиться и спросить, какой путь ведет до деревни":
             return
 
 # chapter 2.3
 label ChooseDirection:
-    "Вы представились, вам стали объяснять, как добраться до деревни."
-    kas "Можно поехать прямо, но тот путь может оказать не безопасным."
-    kas "Можно поехать направо, тот путь длинный и более безопасный."
-    kas "Но на этом пути много развилок, без человека знающего путь, можно потратить много времени."
+    "Вы представились. Вам стали объяснять, как добраться до деревни."
+    petr "Можно поехать прямо, но тот путь может оказаться небезопасным."
+    petr "Можно поехать направо, тот путь длинный и более безопасный."
+    petr "Но на этом пути много развилок, без человека знающего путь, можно потратить много времени."
     
     $ card_shirts = 'dangerous_place | road'
     menu:
         "Поехать прямо.":
             "Вы хотели отправиться прямо, но есть одно но..."
             vas "Нам нужно придумать план, как мы будем ехать по этому пути."
-            vas "Ведь прямо по этому пути находится данж."
+            vas "Ведь дальше находится данж."
             $ straight_or_right = "straight"
             return
         "Поехать направо.":
@@ -298,14 +305,14 @@ label TheWayToDange:
         "Просто проехать, вдруг повезет.":
             # show goblin at right with Dissolve(.3)
             show goblin at right with vpunch
-            "Не удачное решение, на пути видны монстры."
+            "Неудачное решение, на пути видны монстры."
             show vas normal at left with Dissolve(.5)
-            vas "Это будет слишком опасно, давай выберем другое решение."
+            vas "Это слишком опасно, давай выберем другое решение."
             hide goblin with easeoutright
             hide vas normal with easeoutleft
             call TheWayToDange from _call_TheWayToDange_1
         "Поедем медленно, но тихо.":
-            "Не удачное решение, на пути видны монстры."
+            "Неудачное решение, на пути видны монстры."
             # show goblin at right with Dissolve(.3)
             show goblin at right with vpunch
             show vas normal at left with Dissolve(.5)
@@ -325,8 +332,8 @@ label TheWayToDange:
 
 label WayAtNight:
     "Вы наткнулись на что-то непонятное... Луна сменила солнце, но видно как днем..."
-    vas "Вылезла ошибка, она ругается, и показывает что-то непонятное..."
-    vas "Из-за нее мы видим ночью как днем..."
+    vas "Вылезла ошибка, она ругается и показывает что-то непонятное..."
+    vas "Из-за нее мы видим ночью, как днем..."
     return
 
 label Bug:
@@ -335,7 +342,7 @@ label Bug:
     $ card_shirts = 'head_and_question_mark | tools'
     menu:
         "Оставим эту полезную фичу.":
-            "Интересное решение, но в этом случае оно не сработает."
+            "Интересное решение, но монстры нас увидят."
             call Bug from _call_Bug_1
         "Исправить ошибку":
             "Вы стали думать над решением этой проблемы."
@@ -346,23 +353,23 @@ label Bug:
 label ProblemWithNight:
         $ card_shirts = 'shirt | shirt | shirt'
         menu:
-            "public static class Cave\n var nightTime = 1000":
+            "public class Cave\n var nightLight = 10000":
                 "Неправильно, попробуйте еще раз."
                 call ProblemWithNight from _call_ProblemWithNight_1
-            "private static class CAVEE\n var nightTime = 1000":
+            "public class Cave\n var nightLight = 1000":
                 "Неправильно, попробуйте еще раз."
                 call ProblemWithNight from _call_ProblemWithNight_2
-            "private static classe Cave\n var nightTime = 1000":
+            "public class Cave\n var nightLight = 10":
                 "Правильно, теперь ночью стало темно!"
                 vas "Проблема решена!"
                 return
         return
 
-label NexToGate:
+label NextToGate:
     scene vilage_gate with fade
     show vas normal at left with Dissolve(.5)
     vas "Теперь нам надо проехать в деревню, а для этого нужно открыть ворота."
-    vas "Сейчас они закрыты, но они открываются, если решить маленькую загадку."
+    vas "Сейчас они закрыты, но они откроются, если решить маленькую загадку."
     vas "Нужно определить возвращаемый тип выражения, которое написано рядом с воротами."
     return
         
@@ -386,12 +393,12 @@ label Right:
 
     $ card_shirts = 'mouth | head_and_question_mark | eyes'
     menu:
-        "Спросить у Касеки путь.":
-            "Касеки начал вам рассказывать, как добраться до деревни."
-            kas "Я вас скажу, куда нужно поворачивать на развилках, а вы запоминайте, чтобы быстрее добраться до деревни."
-            kas "На пути вам встретится, пять развилок и два моста."
-            kas "Вправо, влево, мост, прямо, влево, мост, прямо"
-            kas "Если вы пройдете так, на всех развилках, то вы попадете в деревню, если сойдете с пути, то ничего страшного, вы попадете к речке."
+        "Спросить у Деда Петра путь.":
+            "Дед Петр начал вам рассказывать, как добраться до деревни."
+            petr "Я вам скажу, куда нужно поворачивать на развилках, а вы запоминайте, чтобы быстрее добраться до деревни."
+            petr "На пути вам встретится пять развилок и один мост."
+            petr "Вправо, влево, мост, прямо, влево, прямо"
+            petr "Если вы пройдете так, на всех развилках, то вы попадете в деревню, если сойдете с пути, то ничего страшного, вы попадете к речке."
             vas "Хорошо, мы вас поняли, большое спасибо!"
             $ card_shirts = 'mouth'
             menu:
@@ -400,15 +407,16 @@ label Right:
                     "Вы ехали, пока не наткнулись на развилку."
             show vas normal at left with Dissolve(.5)
             vas "Какой путь нам лучше выбрать?"
-            $ withKaseki = False
+            $ withPetr = False
             return
-        "Взять с собой в путь Касеки.":
-            "Касеки согласился вам показать путь до деревни."
+        "Взять с собой в путь Деда Петра.":
+            "Дед Петр согласился вам показать путь до деревни."
             scene river_without_bridge with fade
-            "Касеки показывал вам верные пути, пока вы не наткнулись на речку."
+            "Дед Петр показывал вам верные пути, пока вы не наткнулись на речку."
             show vas normal at left with Dissolve(.5)
-            vas "На этом месте должен был быть мост, которого нету по какой то причине и код игры показывает странную ошибку."
-            $ withKaseki = True
+            vas "На этом месте должен был быть мост, которого нету по какой то причине. Код игры показывает странную ошибку.
+            Помоги найти верный варинат."
+            $ withPetr = True
             return
         "Просто поехать куда глаза глядят.":
             "Мне кажется это не самый лучший вариант, мы можем запутаться."
@@ -422,7 +430,7 @@ label RroadToVillage:
     while(not rightChoice):
         menu:
             "Влево.":
-                "Не правильно, вы потеряли время на неверный путь."
+                "Неправильно, вы потеряли время на неверный путь."
             "Вправо.":
                 "Правильный путь, вы поехали дальше."
                 $ rightChoice = True
@@ -436,7 +444,7 @@ label RroadToVillage:
                 "Правильный путь, вы поехали дальше."
                 $ rightChoice = True    
             "Вправо.":
-                "Не правильно, вы потеряли время на неверный путь."
+                "Неправильно, вы потеряли время на неверный путь."
     "Вы наткнулись на речку, где должен был быть мостик, но по какой-то причине его нет и показывается странную ошибку."
     vas "Что-то странное, тут должен быть мостик, но его нет."
     vas "Тут ошибка, показывает что с кодом игры что-то не так..."
@@ -449,14 +457,17 @@ label ProblemWithBridge:
     $ card_shirts = 'shirt | shirt | shirt'
     menu:
         "GameeeObject Bridge = Instantiate(bridgePrefab, new Vector3(xyz), Quaternion.identity);":
-            "К сожалению, не правильно, попробуйте еще раз."
+            "К сожалению, неправильно. Попробуйте еще раз."
+            $ coder_points -= 1
             call ProblemWithBridge from _call_ProblemWithBridge_1
         "GameObject Bridge = Instantiate(bridgePrefab, new Vector3(x, y, z), Quaternion.identity);":
             "Правильно, вы нашли правильный код!"
             vas "Проблема решена!"
             vas "Теперь можно отправляться дальше!"
+            $ coder_points += 1
         "GameObject Bridge\n Instantiate(bridgePrefab, new Vector3(x, y, z), QuaternionIdentity);":
-            "К сожалению, не правильно, попробуйте еще раз."
+            "К сожалению, неправильно. Попробуйте еще раз."
+            $ coder_points -= 1
             call ProblemWithBridge from _call_ProblemWithBridge_2
     return
 
@@ -473,9 +484,9 @@ label SecondPartLongWay:
                 "Правильный путь, вы поехали дальше."
                 $ rightChoice = True
             "Влево":
-                "Не правильно, вы потеряли время на неверный путь."
-    vas "Какой путь нам лучше выбрать?"
+                "Неправильно, вы потеряли время на неверный путь."
     
+    vas "Какой путь нам лучше выбрать?"
     $ card_shirts = 'left_arrow | right_arrow'
     $ rightChoice = False
     while(not rightChoice):
@@ -484,9 +495,8 @@ label SecondPartLongWay:
                 "Правильный путь, вы поехали дальше."
                 $ rightChoice = True
             "вправо":
-                "Не правильно, вы потеряли время на неверный путь."
+                "Неправильно, вы потеряли время на неверный путь."
     vas "Какой путь нам лучше выбрать?"
-    
     $ card_shirts = 'up_arrow | left_arrow'
     $ rightChoice = False
     while(not rightChoice):
@@ -495,22 +505,21 @@ label SecondPartLongWay:
                 "Правильный путь, вы поехали дальше."
                 $ rightChoice = True
             "Влево":
-                "Не правильно, вы потеряли время на неверный путь."
+                "Неправильно, вы потеряли время на неверный путь."
 
     return
 label SecondPartShortWay:
     "Вы ехали, пока не наткнулись на ворота деревни."
-    vas "Теперь нужно открыть ворота, чтобы въехать в деревню."
-    vas "Сейчас они закрыты, но они открываются, если решить маленькую загадку."
+    call NextToGate
     return
 
 # chapter 4.1
 label ChoiseInVillage:
     scene blank with pixellate
-    show kas normal at right
+    show petr normal at right
     show vas normal at left
     "Вы зашли в деревню и начали искать гильдию."
-    kas "Здесь наши пути расходятся, я выполнил свое задание. Удачи вам."
+    petr "Здесь наши пути расходятся, я выполнил свое задание. Удачи вам."
 
     $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
     menu:
@@ -518,52 +527,60 @@ label ChoiseInVillage:
             "Вы отправились искать гильдию."
             vas "Теперь нам нужно найти гильдию, нас там уже ждут."
         "Постойте пожалуйста, скажите как нам найти гильдию?":
-            kas "На здании гильдии должен быть меч, поэтому отличительному знаку вы должны быстро найти ее."
+            petr "На здании гильдии должен быть меч, поэтому отличительному знаку вы должны быстро найти ее."
             vas "Все понял, надеюсь мы ее найдем, больше спасибо. Удачи вам."   
     
-    hide kas
+    hide petr
+    call choice_in_village_menu
+    return
+
+label choice_in_village_menu:
     $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
     menu:
         "Библиотека":
             vas "Хмм, библиотека пустует... В ней нет посетителей..."
             vas "Но тут есть записка! Давайте почитаем, что тут написано!"
             """Посетителей становится все меньше, потому что все боятся заходить в нашу деревню...
-            Я считаю, что это из-за этих проклятых, очень сильных гоблинов... 
+            Я считаю, что это из-за этих проклятых, очень сильных, гоблинов... 
             Наша библиотека вынуждена закрыться..."""
+            vas "Ладно, похоже тут никого мы не найдем."
             # picture
+            call choice_in_village_menu
         "Мясная лавка":
             vas "Лавка выглядит заброшенной..."
             vas "Но тут есть какая-то записка! Давайте прочитаем, что тут написано!"
             """***Наша лавка пришла в упадок...
             Все из-за сильных гоблинов, которые воруют наш скот...
             По этой причине мы вынуждены закрыться...
-            Всего хорошего"""
+            Всего хорошего."""
+            vas "Ладно, похоже здесь никого мы точно не найдем."
+            # picture
+            call choice_in_village_menu
         "Гильдия":
             vas "Это гильдия! Идем!"
             return
-    return
-
+    return  
 # chapter 4.2
-label MeetingWithUmi:
+label MeetingWithNas:
     scene blank with pixellate
     show vas normal at center
-    "Вы зашли в здание, и оказались правы - это гильдия."
+    "Вы зашли в здание и оказались правы - это гильдия."
     show vas normal at right with dissolve
     vas "Нам нужно подойти к стойке администрации, чтобы сообщить, что мы уже прибыли."
     "Вы подошли к стойке"
     show dummy at left with dissolve
-    umi "Здравствуйте!" 
-    umi "Меня зовут Юми, я представитель гильдии."
-    umi "Зачем вы пришли?"
+    nas "Здравствуйте!" 
+    nas "Меня зовут Настя, я представитель гильдии."
+    nas "Зачем вы пришли?"
     vas "Мы выполняем задание от вашей деревни. Доставляем магическое оружие для ваших авантюристов."
-    umi "Хорошо. Наверное вы устали с дороги, не хотите перекусить?"
+    nas "Хорошо. Наверное вы устали с дороги, не хотите перекусить?"
     
     $ card_shirts = "dangerous_place | mouth"
     menu:
         "Отправиться в данж.":
             return
         "Перекусить.":
-            umi "Давайте перекусим"
+            nas "Давайте перекусим"
             call eat from _call_eat
             vas "Хорошо поели! Теперь идем?"
             $ card_shirts = "dangerous_place"
@@ -578,6 +595,7 @@ label eat:
 label variables:
     $ coder_points = 0.0
     $ card_shirts = ""
+    $ withoutWheel = False
     return
 
 label end:
