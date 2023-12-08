@@ -226,6 +226,7 @@ screen choice(items):
                     idle_background "images/cards/" + card_shirt[i] + ".png"
                     # hover_background "images/cards/shirt.png"
                     hover_background "images/cards/" + card_shirt[i] + ".png"
+                    hover_sound "audio/SFX/Button_hover.ogg"
                     text items[i].caption align 0.5, 0.08
                     action items[i].action
 
@@ -313,39 +314,36 @@ screen navigation():
 
         if main_menu:
 
-            textbutton _("Start") action Start()
+            textbutton _("Start") hover_sound "audio/SFX/Gui_button_hover.ogg" action Start() 
 
         else:
+            
+            textbutton _("History") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("history")
 
-            textbutton _("History") action ShowMenu("history")
+            textbutton _("Save") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("save")
 
-            textbutton _("Save") action ShowMenu("save")
+        textbutton _("Load") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("load")
 
-        textbutton _("Load") action ShowMenu("load")
-
-        textbutton _("Preferences") action ShowMenu("preferences")
+        textbutton _("Preferences") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("preferences")
 
         if _in_replay:
-
-            textbutton _("End Replay") action EndReplay(confirm=True)
+            textbutton _("End Replay") hover_sound "audio/SFX/Gui_button_hover.ogg" action EndReplay(confirm=True)
 
         elif not main_menu:
+            textbutton _("Main Menu") hover_sound "audio/SFX/Gui_button_hover.ogg" action MainMenu()
 
-            textbutton _("Main Menu") action MainMenu()
-
-        textbutton _("About") action ShowMenu("about")
+        textbutton _("About") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("about")
 
         if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
 
             ## Help isn't necessary or relevant to mobile devices.
-            textbutton _("Help") action ShowMenu("help")
+            textbutton _("Help") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("help")
 
         if renpy.variant("pc"):
 
             ## The quit button is banned on iOS and unnecessary on Android and
             ## Web.
-            textbutton _("Quit") action Quit(confirm=not main_menu)
-
+            textbutton _("Quit") hover_sound "audio/SFX/Gui_button_hover.ogg" action Quit(confirm=not main_menu)
 
 style navigation_button is gui_button
 style navigation_button_text is gui_button_text
@@ -368,7 +366,7 @@ screen main_menu():
 
     ## This ensures that any other menu screen is replaced.
     tag menu
-
+    
     add gui.main_menu_background
 
     ## This empty frame darkens the main menu.
@@ -486,7 +484,7 @@ screen game_menu(title, scroll=None, yinitial=0.0):
 
     textbutton _("Return"):
         style "return_button"
-
+        hover_sound "audio/SFX/Gui_button_hover.ogg"
         action Return()
 
     label title
@@ -623,7 +621,7 @@ screen file_slots(title):
             ## The page name, which can be edited by clicking on a button.
             button:
                 style "page_label"
-
+                hover_sound "audio/SFX/Gui_button_hover.ogg"
                 key_events True
                 xalign 0.5
                 action page_name_value.Toggle()
@@ -647,7 +645,7 @@ screen file_slots(title):
 
                     button:
                         action FileAction(slot)
-
+                        hover_sound "audio/SFX/Gui_button_hover.ogg"
                         has vbox
 
                         add FileScreenshot(slot) xalign 0.5
@@ -669,31 +667,32 @@ screen file_slots(title):
 
                 hbox:
                     xalign 0.5
+                    spacing -400
 
-                    spacing gui.page_spacing
-
-                    textbutton _("<") action FilePagePrevious()
+                    textbutton _("<") hover_sound "audio/SFX/Gui_button_hover.ogg" action FilePagePrevious()
 
                     if config.has_autosave:
-                        textbutton _("{#auto_page}A") action FilePage("auto")
+                        textbutton _("{#auto_page}A") hover_sound "audio/SFX/Gui_button_hover.ogg" action FilePage("auto")
 
                     if config.has_quicksave:
-                        textbutton _("{#quick_page}Q") action FilePage("quick")
+                        textbutton _("{#quick_page}Q") hover_sound "audio/SFX/Gui_button_hover.ogg" action FilePage("quick")
 
                     ## range(1, 10) gives the numbers from 1 to 9.
                     for page in range(1, 10):
-                        textbutton "[page]" action FilePage(page)
+                        textbutton "[page]" hover_sound "audio/SFX/Gui_button_hover.ogg" action FilePage(page)
 
-                    textbutton _(">") action FilePageNext()
+                    textbutton _(">") hover_sound "audio/SFX/Gui_button_hover.ogg" action FilePageNext()
 
                 if config.has_sync:
                     if CurrentScreenName() == "save":
                         textbutton _("Upload Sync"):
-                            action UploadSync()
+                            # action UploadSync()
+                            hover_sound "audio/SFX/Gui_button_hover.ogg"
                             xalign 0.5
                     else:
                         textbutton _("Download Sync"):
-                            action DownloadSync()
+                            # action DownloadSync()
+                            hover_sound "audio/SFX/Gui_button_hover.ogg"
                             xalign 0.5
 
 
@@ -752,15 +751,15 @@ screen preferences():
                     vbox:
                         style_prefix "radio"
                         label _("Display")
-                        textbutton _("Window") action Preference("display", "window")
-                        textbutton _("Fullscreen") action Preference("display", "fullscreen")
+                        textbutton _("Window") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("display", "window")
+                        textbutton _("Fullscreen") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("display", "fullscreen")
 
                 vbox:
                     style_prefix "check"
                     label _("Skip")
-                    textbutton _("Unseen Text") action Preference("skip", "toggle")
-                    textbutton _("After Choices") action Preference("after choices", "toggle")
-                    textbutton _("Transitions") action InvertSelected(Preference("transitions", "toggle"))
+                    textbutton _("Unseen Text") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("skip", "toggle")
+                    textbutton _("After Choices") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("after choices", "toggle")
+                    textbutton _("Transitions") hover_sound "audio/SFX/Gui_button_hover.ogg" action InvertSelected(Preference("transitions", "toggle"))
 
                 ## Additional vboxes of type "radio_pref" or "check_pref" can be
                 ## added here, to add additional creator-defined preferences.
@@ -815,6 +814,7 @@ screen preferences():
                         textbutton _("Mute All"):
                             action Preference("all mute", "toggle")
                             style "mute_all_button"
+                            hover_sound "audio/SFX/Gui_button_hover.ogg"
 
 
 style pref_label is gui_label
@@ -999,11 +999,11 @@ screen help():
 
             hbox:
 
-                textbutton _("Keyboard") action SetScreenVariable("device", "keyboard")
-                textbutton _("Mouse") action SetScreenVariable("device", "mouse")
+                textbutton _("Keyboard") hover_sound "audio/SFX/Gui_button_hover.ogg" action SetScreenVariable("device", "keyboard")
+                textbutton _("Mouse") hover_sound "audio/SFX/Gui_button_hover.ogg" action SetScreenVariable("device", "mouse")
 
                 if GamepadExists():
-                    textbutton _("Gamepad") action SetScreenVariable("device", "gamepad")
+                    textbutton _("Gamepad") hover_sound "audio/SFX/Gui_button_hover.ogg" action SetScreenVariable("device", "gamepad")
 
             if device == "keyboard":
                 use keyboard_help
@@ -1179,8 +1179,8 @@ screen confirm(message, yes_action, no_action):
                 xalign 0.5
                 spacing 150
 
-                textbutton _("Yes") action yes_action
-                textbutton _("No") action no_action
+                textbutton _("Yes") hover_sound "audio/SFX/Gui_button_hover.ogg" action yes_action
+                textbutton _("No") hover_sound "audio/SFX/Gui_button_hover.ogg" action no_action
 
     ## Right-click and escape answer "no".
     key "game_menu" action no_action
