@@ -53,11 +53,15 @@ label start:
 
 #  Предисловие Pavyk96
 label Preface:
+    play music "audio/Various Themes/Origins.ogg" fadein 0.5 volume 0.1 loop
     show vasya_at_the_computer
     "Вася, которому мы помогали исправлять ошибки на Ulearn, закончил университет и начал разработку собственной игры."
     "У него возникли проблемы в создании игры, появились баги, которые нужно исправить. В этом ему очень нужна ваша помощь!"
+    stop music
+    play sound "audio/SFX/Awe_2.ogg" volume 0.5
     show vasya_at_the_computer_surprised
     pause 2
+    play sound "audio/SFX/Awe_1.ogg" volume 0.5
     show portal
     "Вас с Васей засасывает в игру..." 
     return
@@ -70,7 +74,7 @@ label FirstChapter:
     return
 
 label SecondChapter:
-    call ComingOfPetr
+    call ComingOfPetr from _call_ComingOfPetr
     call AskForDirectionsToTheVillage from _call_AskForDirectionsToTheVillage
     call ChooseDirection from _call_ChooseDirection
     return
@@ -81,30 +85,32 @@ label ThirdChapter:
         call WayAtNight from _call_WayAtNight
         call Bug from _call_Bug
         call ProblemWithNight from _call_ProblemWithNight
-        call NextToGate
+        call NextToGate from _call_NextToGate
         call ChoosingSolution from _call_ChoosingSolution
     else:
         call Right from _call_Right
         if (withPetr == False):
-            call RoadToVillage
+            call RoadToVillage from _call_RoadToVillage
         call ProblemWithBridge from _call_ProblemWithBridge
         if (withPetr == True):
             call SecondPartShortWay from _call_SecondPartShortWay
         else:
             call SecondPartLongWay from _call_SecondPartLongWay
-            call NextToGate
+            call NextToGate from _call_NextToGate_1
         call ChoosingSolution from _call_ChoosingSolution_1 
     return
 
 label FourthChapter:
     call ChoiseInVillage from _call_ChoiseInVillage
-    call MeetingWithNas 
+    call MeetingWithNas from _call_MeetingWithNas 
     return
 
 # map section. Chapter 1.1      
 label WorldMap:
     scene forest_without_vasa
     with fade
+    stop sound
+    play music "audio/Towns/Farm Life.ogg" volume 0.035 fadein 0.5 loop
     show vas normal at left
     "Перед собой вы видите фэнтезийный мир и озадаченного Васю"
    
@@ -117,9 +123,9 @@ label WorldMap:
     return
 
 label what_happend:
-    vas "Я попал в свою игру, но тут слишком много багов."
+    vas "Мы попали в мою игру! Но я еще не успел исправить баги..."
     show vas normal
-    vas "Помоги, пожалуйста!"
+    vas "Помоги, пожалуйста! Иначе мы не выберемся..."
     return
 
 label admire_vasya:
@@ -127,12 +133,9 @@ label admire_vasya:
     show vas normal at left
     pause 2
     
-    "Вася смотрел на Вас около 5 минут и не понимал, почему вы молчите"
-    
-    vas "Привет, я очень рад тебя видеть!"
+    "Вася смотрел на Вас около 5 минут и не понимал, почему Вы молчите"
     
     vas "Можешь мне помочь, пожалуйста?"
-
     menu:
         'Спросить: "Что случилось?" ':
             call what_happend from _call_what_happend_1
@@ -142,7 +145,7 @@ label admire_vasya:
 label BrokenCart:
     scene forest_and_road_purple_wheel_with_vasya
     vas "У повозки куда-то пропало колесо."
-    vas "Можешь мне помочь, пожалуйста?"
+    vas "Что делать?"
     $ card_shirts = "head_and_question_mark"
     menu: 
         "Подумать над решением этой проблемы":
@@ -232,6 +235,8 @@ label chapter1_3_where_to:
 
 # chapter 2.1
 label ComingOfPetr:
+    stop music fadeout 0.5
+    play music "audio/Overworld/Journey Across the Blue.ogg" fadein 0.5 volume 0.04 loop
     scene petrHouse
     with fade
     "Вы ехали, пока не наткнулись на развилку с деревянным домиком."
@@ -255,7 +260,7 @@ label AskForDirectionsToTheVillage:
         "Представиться и спросить, какой путь ведет до деревни":
             return
         "Спросить, что Дед Петр делает в таком опасном месте":
-            call AboutPetr
+            call AboutPetr from _call_AboutPetr
     return
 
 label AboutPetr:
@@ -299,11 +304,14 @@ label ChooseDirection:
 # TODO: deal with card shirts and sprites HERE
 # chapter 3.1
 label TheWayToDange:
+    stop music fadeout 0.5
+    play music "audio/Dungeons/Temple of Tomb.ogg" fadein 0.5 volume 0.5 loop
     scene dungeon_at_day
     $ card_shirts = 'head_and_question_mark | head_and_question_mark | head_and_question_mark'
     menu:
         "Просто проехать, вдруг повезет.":
             # show goblin at right with Dissolve(.3)
+            play sound "audio/SFX/Fail_3.ogg" volume 0.5 fadeout 0.5
             show goblin at right with vpunch
             "Неудачное решение, на пути видны монстры."
             show vas normal at left with Dissolve(.5)
@@ -312,9 +320,9 @@ label TheWayToDange:
             hide vas normal with easeoutleft
             call TheWayToDange from _call_TheWayToDange_1
         "Поедем медленно, но тихо.":
-            "Неудачное решение, на пути видны монстры."
-            # show goblin at right with Dissolve(.3)
+            play sound "audio/SFX/Fail_3.ogg" volume 0.5 fadeout 0.5
             show goblin at right with vpunch
+            "Неудачное решение, на пути видны монстры."
             show vas normal at left with Dissolve(.5)
             vas "Мне кажется, это будет хорошей идеей, если мы отправимся ночью, как думаешь?"
             hide goblin with easeoutright
@@ -366,6 +374,8 @@ label ProblemWithNight:
         return
 
 label NextToGate:
+    stop music fadeout 0.5
+    play music "audio/Towns/Smooth As Glass.ogg" volume 0.035 fadein 0.5 loop 
     scene vilage_gate with fade
     show vas normal at left with Dissolve(.5)
     vas "Теперь нам надо проехать в деревню, а для этого нужно открыть ворота."
@@ -390,7 +400,8 @@ label ChoosingSolution:
 
 # Chapter 3.2
 label Right:
-
+    stop music
+    play music "audio/Overworld/World Travelers.ogg" fadein 0.5 volume 0.04 loop
     $ card_shirts = 'mouth | head_and_question_mark | eyes'
     menu:
         "Спросить у Деда Петра путь.":
@@ -424,7 +435,7 @@ label Right:
             call Right from _call_Right_1
     return
 
-label RroadToVillage:
+label RoadToVillage:
     $ card_shirts = 'left_arrow | right_arrow'
     $ rightChoice = False
     while(not rightChoice):
@@ -510,7 +521,7 @@ label SecondPartLongWay:
     return
 label SecondPartShortWay:
     "Вы ехали, пока не наткнулись на ворота деревни."
-    call NextToGate
+    call NextToGate from _call_NextToGate_2
     return
 
 # chapter 4.1
@@ -531,7 +542,7 @@ label ChoiseInVillage:
             vas "Все понял, надеюсь мы ее найдем, больше спасибо. Удачи вам."   
     
     hide petr
-    call choice_in_village_menu
+    call choice_in_village_menu from _call_choice_in_village_menu
     return
 
 label choice_in_village_menu:
@@ -545,7 +556,7 @@ label choice_in_village_menu:
             Наша библиотека вынуждена закрыться..."""
             vas "Ладно, похоже тут никого мы не найдем."
             # picture
-            call choice_in_village_menu
+            call choice_in_village_menu from _call_choice_in_village_menu_1
         "Мясная лавка":
             vas "Лавка выглядит заброшенной..."
             vas "Но тут есть какая-то записка! Давайте прочитаем, что тут написано!"
@@ -555,7 +566,7 @@ label choice_in_village_menu:
             Всего хорошего."""
             vas "Ладно, похоже здесь никого мы точно не найдем."
             # picture
-            call choice_in_village_menu
+            call choice_in_village_menu from _call_choice_in_village_menu_2
         "Гильдия":
             vas "Это гильдия! Идем!"
             return
