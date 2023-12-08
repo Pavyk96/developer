@@ -23,6 +23,7 @@ image goblin = im.Scale("mobs/goblin.png.", 768, 768) #нужен спрайт
 # enviroment sprites
 image forest_and_road_purple_wheel_with_vasya = im.Scale("FirstChapter/forest and road final without wheel.png", 1920, 1080) 
 image forest_and_road_normal_with_vasya = im.Scale("FirstChapter/forest and road final.png", 1920, 1080)
+image forest_and_road_purple_wheel_without_vasya = im.Scale("FirstChapter/forest and road final without wheel without vasya.png", 1920, 1080)
 image forest_without_vasa = im.Scale("bg/forest_without_vasa.png", 1920, 1080)
 image petrHouse = im.Scale("SecondChapter/home.png", 1920, 1080)
 image dungeon_at_day = im.Scale("ThirdChapter/dungeon_at_day.jpg", 1920, 1080) #нужен спрайт
@@ -57,8 +58,6 @@ label Preface:
     show vasya_at_the_computer
     "Вася, которому мы помогали исправлять ошибки на Ulearn, закончил университет и начал разработку собственной игры."
     "У него возникли проблемы в создании игры, появились баги, которые нужно исправить. В этом ему очень нужна ваша помощь!"
-    stop music
-    play sound "audio/SFX/Awe_2.ogg" volume 0.5
     show vasya_at_the_computer_surprised
     pause 2
     play sound "audio/SFX/Awe_1.ogg" volume 0.5
@@ -107,8 +106,9 @@ label FourthChapter:
 
 # map section. Chapter 1.1      
 label WorldMap:
-    scene forest_without_vasa
+    scene forest_and_road_purple_wheel_without_vasya
     with fade
+    stop music
     stop sound
     play music "audio/Towns/Farm Life.ogg" volume 0.035 fadein 0.5 loop
     show vas normal at left
