@@ -129,7 +129,7 @@ label what_happend:
     return
 
 label admire_vasya:
-    show forest_without_vasa
+    scene forest_and_road_purple_wheel_without_vasya
     show vas normal at left
     pause 2
     
