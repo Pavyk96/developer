@@ -4,7 +4,7 @@
 
 define vas = Character("Вася", color="#00e4fd")
 define petr = Character("Дед Петр", color="#fbff00ff")
-define nas = Character("Настя", color="#e600ffff")
+define dar = Character("Дарья Дмитриевна", color="#e600ffff")
 
 # background images
 image portal = im.Scale("bg/portal.png", 1920, 1080)
@@ -57,10 +57,10 @@ label start:
     call FourthChapter from _call_FourthChapter
 
     # fifth chapter
-    call FifthChapter
+    call FifthChapter from _call_FifthChapter
     
     # end 
-    call End
+    call End from _call_End
     return
 
 
@@ -113,15 +113,15 @@ label ThirdChapter:
 
 label FourthChapter:
     call ChoiseInVillage from _call_ChoiseInVillage
-    call MeetingWithNas from _call_MeetingWithNas 
+    call MeetingWithDar from _call_MeetingWithDar 
     return
 
 label FifthChapter:
-    call DialogueNearDungeon
-    call BugFix
-    call TheWayToBoss
-    call NearBoss
-    call Boss
+    call DialogueNearDungeon from _call_DialogueNearDungeon
+    call BugFix from _call_BugFix
+    call TheWayToBoss from _call_TheWayToBoss
+    call NearBoss from _call_NearBoss
+    call Boss from _call_Boss
     return
 
 # map section. Chapter 1.1      
@@ -252,7 +252,7 @@ label CartIsFixed:
 
 label chapter1_3_where_to:
     vas "Нам нужно доставить снаряжение для авантюристов в деревню неподалеку"
-    vas "Около неё появился данж с монстрами, и никто не вызывался помочь, кроме нас"
+    vas "Около неё появился данж с монстрами, и никто, кроме нас, не вызывался помочь"
     vas "Поэтому за эту срочную задачу от гильдии взялись только мы, рискуя своими жизнями."
     
     $ card_shirts = 'mouth'
@@ -472,7 +472,7 @@ label Right:
             scene river_without_bridge with fade
             "Дед Петр показывал вам верные пути, пока вы не наткнулись на речку."
             show vas normal at left with Dissolve(.5)
-            vas "На этом месте должен был быть мост, которого нету по какой то причине. Код игры показывает странную ошибку.
+            vas "На этом месте должен был быть мост, которого нет по какой то причине. Код игры показывает странную ошибку.
             Помоги найти верный варинат."
             $ withPetr = True
             return
@@ -520,7 +520,7 @@ label ProblemWithBridge:
             $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
             call ProblemWithBridge from _call_ProblemWithBridge_1
         "GameObject Bridge = Instantiate(bridgePrefab, new Vector3(x, y, z), Quaternion.identity);":
-            "Правильно, вы нашли правильный код!"
+            "Правильно, вы нашли верный код!"
             vas "Проблема решена!"
             vas "Теперь можно отправляться дальше!"
             $ coder_points += 2
@@ -589,7 +589,7 @@ label ChoiseInVillage:
             "Вы отправились искать гильдию."
             vas "Теперь нам нужно найти гильдию, нас там уже ждут."
         "Постойте пожалуйста, скажите как нам найти гильдию?":
-            petr "На здании гильдии должен быть меч, поэтому отличительному знаку вы должны быстро найти ее."
+            petr "На здании гильдии должен быть меч, по этому отличительному знаку вы должны быстро найти ее."
             vas "Все понял, надеюсь мы ее найдем, больше спасибо. Удачи вам."   
     
     hide petr
@@ -626,7 +626,7 @@ label choice_in_village_menu:
 
 # TODO: deal with card shirts and sprites HERE
 # chapter 4.2
-label MeetingWithNas:
+label MeetingWithDar:
     scene blank with pixellate
     show vas normal at center
     "Вы зашли в здание и оказались правы - это гильдия."
@@ -634,29 +634,31 @@ label MeetingWithNas:
     vas "Нам нужно подойти к стойке администрации, чтобы сообщить, что мы уже прибыли."
     "Вы подошли к стойке"
     show dummy at left with dissolve
-    nas "Здравствуйте!" 
-    nas "Меня зовут Настя, я представитель гильдии."
-    nas "Зачем вы пришли?"
+    dar "Здравствуйте!" 
+    dar "Меня зовут Дарья Дмитриевна, я представитель гильдии."
+    dar "Зачем вы пришли?"
     vas "Мы выполняем задание от вашей деревни. Доставляем магическое оружие для ваших авантюристов."
-    nas "Хорошо. Наверное вы устали с дороги, не хотите перекусить?"
+    dar "Хорошо. Наверное вы устали с дороги, не хотите перекусить?"
     
     $ card_shirts = "dangerous_place | mouth"
     menu:
         "Отправиться в данж.":
+        "Дарья Дмитриевна показала вам дорогу"
             return
         "Перекусить.":
-            nas "Давайте перекусим"
+            dar "Давайте перекусим"
             call eat from _call_eat
             vas "Хорошо поели! Теперь идем?"
             $ card_shirts = "dangerous_place"
             menu:
                 "Отправиться в данж":
+                    "Дарья Дмитриевна показала вам дорогу"
                     return
     return
 
 label eat:
     vas "Вкусно..."
-    nas "Вкусно!"
+    dar "Вкусно!"
     return
 
 # TODO: deal with card shirts and sprites HERE
@@ -665,7 +667,7 @@ label DialogueNearDungeon:
     scene blank with pixellate
     show vas normal at left
     "Вы у входа в подземелье"
-    vas "Настя сказала, что в этом подземелье начали обитать очень сильные мобы..."
+    vas "Дарья сказала, что в этом подземелье начали обитать очень сильные мобы..."
     vas "Это очень сильно нарушает баланс моей игры... Интересно в чем же проблема?"
     $ card_shirts = "head_and_question_mark"
     menu: 
@@ -676,7 +678,7 @@ label DialogueNearDungeon:
     $ card_shirts = "head_and_question_mark"
     menu: 
         "Войти в подземелье":
-            call inTheDungeon
+            call inTheDungeon from _call_inTheDungeon
     return
 
 # TODO: deal with card shirts and sprites HERE
@@ -691,7 +693,7 @@ label inTheDungeon:
             pass
     "Вы спросили почему Вася решил сделать свою игру"
     vas "Мне всегда нравилось играть в видеоигры, они гораздо интереснее книг и фильмов..."
-    vas 'Поэтому я выучился на профессию "ГЕЙМРАЗРАБОТЧКА"'
+    vas 'Поэтому я выучился на профессию "ГЕЙМРАЗРАБОТЧИКА"'
     $ card_shirts = "question_mark"    
     menu:
         "Чем занимается геймразработчик?":
@@ -741,7 +743,7 @@ label BugFix:
     "Вы выполнили роль геймдизайнера и программиста."
     "Вы двинулись дальше... В глубь подземелья..."
     
-    vas "После битвы с монстрами, игрока обычно ждет вознаграждение..."
+    vas "После битвы с монстрами игрока обычно ждет вознаграждение..."
     vas "Давай дадим награды игроку за победу в битве!"
     vas "Но какую награду лучше выбрать...?"
 
@@ -828,10 +830,10 @@ label TheWayToBoss:
     vas "Остается совсем немного! Пойдемте вперед!"
     hide dummy
     "Вы пошли вперед..."
-    vas "Программист - пишет код для игры, оптимизирует ее..."
+    vas "Программист пишет код для игры, оптимизирует ее..."
     vas "Добавляет механики в игру, придуманные геймдизайнером..."
     vas 'Геймдизайнер отвечает за сюжет игры, ее "интересность" и "необычность".'
-    vas "На плечах геймдизайнера лежит задача заинтересовать игрока, увлечь его геймлпеем, сделать игру уникальной!"
+    vas "На плечах геймдизайнера лежит задача заинтересовать игрока, увлечь его геймплеем, сделать игру уникальной!"
     vas 'Дизайнер делает так, чтобы игра выглядела "сочно" и "вкусно".'
     vas 'Все эти специальности подходят под профессию "ГЕЙМРАЗРАБОТЧИКА"'
     vas "Поэтому очень важно определиться с тем, что тебе больше нравится!"
@@ -979,7 +981,7 @@ label Boss:
     elif (16 <= coder_points < 22):
         "Васину игру хорошо оценили игроки. Фанаты требуют второй части! И все это ваша заслуга!"
     else:
-        "Васину игра взлетела по популярности среди игроков. Она рвет все рекорды по онлайнам. И все благодаря вам!"
+        "Васина игра взлетела среди игроков. Она рвет все рекорды по онлайнам. И все благодаря вам!"
     return
 
 label variables:
@@ -990,7 +992,6 @@ label variables:
     $ is_the_lama_easter_egg = False
     $ flag = False
     return
-
 
 label End:
     show black with fade
