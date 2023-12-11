@@ -18,7 +18,10 @@ image vasya_at_the_computer = im.Scale("bg/Vasya at the computer.png", 1920, 108
 image vasya_at_the_computer_surprised = im.Scale("bg/Vasya at the computer with a surprised face.png", 1920, 1080)
 
 # mobs sprites
-image goblin = im.Scale("mobs/goblin.png.", 768, 768) #нужен спрайт
+image goblins = im.Scale("images/ThirdChapter/DungeonSection/goblins.png", 960, 670)
+image goblin1= im.Scale("images/ThirdChapter/DungeonSection/goblin 1.png", 276, 648)
+image goblin2 = im.Scale("images/ThirdChapter/DungeonSection/goblin 2.png", 321, 567)
+image goblin3 = im.Scale("images/ThirdChapter/DungeonSection/goblin 3.png", 317, 530)
 
 # enviroment sprites
 image forest_and_road_purple_wheel_with_vasya = im.Scale("FirstChapter/forest and road final without wheel.png", 1920, 1080) 
@@ -26,11 +29,14 @@ image forest_and_road_normal_with_vasya = im.Scale("FirstChapter/forest and road
 image forest_and_road_purple_wheel_without_vasya = im.Scale("FirstChapter/forest and road final without wheel without vasya.png", 1920, 1080)
 image forest_without_vasa = im.Scale("bg/forest_without_vasa.png", 1920, 1080)
 image petrHouse = im.Scale("SecondChapter/home.png", 1920, 1080)
-image dungeon_at_day = im.Scale("ThirdChapter/dungeon_at_day.jpg", 1920, 1080) #нужен спрайт
-image dungeon_at_nigth = im.Scale("ThirdChapter/dungeon_at_nigth.jpg", 1920, 1080) #нужен спрайт
-image vilage_gate = im.Scale("ThirdChapter/vilage_gate.png", 1920, 1080) #нужен спрайт
+image dungeon_at_day = im.Scale("ThirdChapter/DungeonSection/cave sun day.png", 1920, 1080)
+image dungeon_at_nigth = im.Scale("ThirdChapter/DungeonSection/cave moon night.png", 1920, 1080)
+image vilage_gate = im.Scale("ThirdChapter/DungeonSection/Gate.png", 1920, 1080)
+image bug_with_night = im.Scale("ThirdChapter/DungeonSection/cave moon day.png", 1920, 1080)
 image river_without_bridge = im.Scale("ThirdChapter/river_without_bridge.png", 1920, 1080) #нужен спрайт
 image forest = im.Scale("ThirdChapter/forest.jpg", 1920, 1080) #нужен спрайт
+image normal_boss_gates = im.Scale("FifthChapter/normalGates.jpg", 1920*0.5, 1080*0.5) #нужен спрайт
+image strange_boss_gates = im.Scale("FifthChapter/StrangeGates.png", 1920*0.5, 1080*0.5) #нужен спрайт
 # The game starts here.
 label start:
     call variables from _call_variables
@@ -49,6 +55,12 @@ label start:
 
     # fourth chapter
     call FourthChapter from _call_FourthChapter
+
+    # fifth chapter
+    call FifthChapter
+    
+    # end 
+    call End
     return
 
 
@@ -102,6 +114,14 @@ label ThirdChapter:
 label FourthChapter:
     call ChoiseInVillage from _call_ChoiseInVillage
     call MeetingWithNas from _call_MeetingWithNas 
+    return
+
+label FifthChapter:
+    call DialogueNearDungeon
+    call BugFix
+    call TheWayToBoss
+    call NearBoss
+    call Boss
     return
 
 # map section. Chapter 1.1      
@@ -163,7 +183,9 @@ label BrokenCart:
             vas "Мы хорошо постарались и исправили нужную переменную!"
             "Выглядит надёжно, теперь вы можете отправляться дальше!"
         "Рядом лес! Просто сделаем новое колесо, да и все!":
-            $ coder_points -= 0.2
+            $ coder_points -= 1
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+
             vas "Это было долго, мы потеряли много времени, но справились!" 
             vas "Выглядит вроде надежно, можем, наверное, отправляться дальше..."
         "Повозка сможет ехать и на трех колесах, зачем ей четвертое?":
@@ -173,16 +195,23 @@ label BrokenCart:
 
 label chapter1_2_code_game:
     $ coder_points += 5
+    $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
     
     while(True):
-        $ card_shirts = 'shirt | shirt | shirt'
+        $ card_shirts = 'code1 | code2 | code3'
         menu:
             "class Cart(): \n ... \n    numberOfWheels = 1":
                 "Неправильно, сколько всего колес у повозки?"
+                $ coder_points -= 0.5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
             "class Cart(): \n ... \n    numberOfWheels = 3":
                     "Неправильно, сколько всего колес у повозки?"
+                    $ coder_points -= 0.5
+                    $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
             "class Cart(): \n ... \n    numberOfWheels = 4":
                     "Правильно, теперь у повозки 4 колеса!"
+                    $ coder_points += 2
+                    $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
                     return
                             
 label three_wheeled_carts:
@@ -194,13 +223,15 @@ label three_wheeled_carts:
             call chapter1_2_code_game from _call_chapter1_2_code_game_1
             "Мы хорошо постарались и исправили нужную переменную!"
         "Рядом лес! Просто сделаем новое колесо, да и все!":
-            $ coder_points -= 0.2
+            $ coder_points -= 1
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
             "Это было долго, мы потеряли много времени, но справились!" 
             vas "Выглядит вроде надежно, можем, наверное, отправляться дальше..."
         "Оставить все как есть":
             vas "Ну ладно, может само починится"
             $ withoutWheel = True
-            $ coder_points -= 5
+            $ coder_points -= 3
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
     
     return
 
@@ -307,39 +338,41 @@ label TheWayToDange:
     stop music fadeout 0.5
     play music "audio/Dungeons/Temple of Tomb.ogg" fadein 0.5 volume 0.5 loop
     scene dungeon_at_day
-    $ card_shirts = 'head_and_question_mark | head_and_question_mark | head_and_question_mark'
+    $ card_shirts = 'fast | slow | moon'
     menu:
-        "Просто проехать, вдруг повезет.":
-            # show goblin at right with Dissolve(.3)
+        "Просто быстро проехать, вдруг повезет.":
             play sound "audio/SFX/Fail_3.ogg" volume 0.5 fadeout 0.5
-            show goblin at right with vpunch
+            show goblins at right with vpunch
             "Неудачное решение, на пути видны монстры."
             show vas normal at left with Dissolve(.5)
             vas "Это слишком опасно, давай выберем другое решение."
-            hide goblin with easeoutright
-            hide vas normal with easeoutleft
+            hide goblins with Dissolve(.5)
+            hide vas normal with Dissolve(.5)
             call TheWayToDange from _call_TheWayToDange_1
         "Поедем медленно, но тихо.":
             play sound "audio/SFX/Fail_3.ogg" volume 0.5 fadeout 0.5
-            show goblin at right with vpunch
+            show goblins at right with vpunch
             "Неудачное решение, на пути видны монстры."
             show vas normal at left with Dissolve(.5)
             vas "Мне кажется, это будет хорошей идеей, если мы отправимся ночью, как думаешь?"
-            hide goblin with easeoutright
-            hide vas normal with easeoutleft
+            hide goblins with Dissolve(.5)
+            hide vas normal with Dissolve(.5)
             call TheWayToDange from _call_TheWayToDange_2
         "Дождаться ночи и отправится в путь.":
             "Вот этот метод может сработать, надо попробовать. Вы стали ожидать ночи."
             scene dungeon_at_nigth with fade
             show vas normal at left with Dissolve(.5)
             vas "Наступила ночь, отправляемся?"
+            $card_shirts = "exclamation_mark"
             menu:
                 "Да, отправляемся!":
                     return
     return
 
 label WayAtNight:
-    "Вы наткнулись на что-то непонятное... Луна сменила солнце, но видно как днем..."
+    scene bug_with_night with pixellate
+    "Но тут произошло что-то непонятное... Хоть луна и сменила солнце, светло осталось, как днем..."
+    show vas normal at center with dissolve
     vas "Вылезла ошибка, она ругается и показывает что-то непонятное..."
     vas "Из-за нее мы видим ночью, как днем..."
     return
@@ -359,17 +392,26 @@ label Bug:
     return
 
 label ProblemWithNight:
-        $ card_shirts = 'shirt | shirt | shirt'
+        $ card_shirts = 'code5 | code6 | code7'
         menu:
             "public class Cave\n var nightLight = 10000":
                 "Неправильно, попробуйте еще раз."
+                $ coder_points -= 0.5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
                 call ProblemWithNight from _call_ProblemWithNight_1
             "public class Cave\n var nightLight = 1000":
                 "Неправильно, попробуйте еще раз."
+                $ coder_points -= 0.5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
                 call ProblemWithNight from _call_ProblemWithNight_2
             "public class Cave\n var nightLight = 10":
+                scene dungeon_at_nigth
+                $ coder_points += 2
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
                 "Правильно, теперь ночью стало темно!"
                 vas "Проблема решена!"
+                scene black with dissolve
+                "Вы успешно прошли пещеру!"
                 return
         return
 
@@ -385,16 +427,21 @@ label NextToGate:
         
 label ChoosingSolution:
     "var a = 2 / 3 * 5;"
-
-    $ card_shirts = 'shirt | shirt | shirt'
+    $ card_shirts = 'code8 | code1 | code3'
     menu:
         "Double":
             "Неверно... Попробуйте другой ответ."
             call ChoosingSolution from _call_ChoosingSolution_2
+            $ coder_points -= 0.5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
         "Long":
             "Неверно... Попробуйте другой ответ."
             call ChoosingSolution from _call_ChoosingSolution_3
+            $ coder_points -= 0.5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
         "int":
+            $ coder_points += 2
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
             return
     return
 
@@ -465,20 +512,23 @@ label RoadToVillage:
 
 # TODO: deal with menu section here.
 label ProblemWithBridge:
-    $ card_shirts = 'shirt | shirt | shirt'
+    $ card_shirts = 'code4 | code5 | code7'
     menu:
         "GameeeObject Bridge = Instantiate(bridgePrefab, new Vector3(xyz), Quaternion.identity);":
             "К сожалению, неправильно. Попробуйте еще раз."
-            $ coder_points -= 1
+            $ coder_points -= 0.5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
             call ProblemWithBridge from _call_ProblemWithBridge_1
         "GameObject Bridge = Instantiate(bridgePrefab, new Vector3(x, y, z), Quaternion.identity);":
             "Правильно, вы нашли правильный код!"
             vas "Проблема решена!"
             vas "Теперь можно отправляться дальше!"
-            $ coder_points += 1
+            $ coder_points += 2
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
         "GameObject Bridge\n Instantiate(bridgePrefab, new Vector3(x, y, z), QuaternionIdentity);":
             "К сожалению, неправильно. Попробуйте еще раз."
-            $ coder_points -= 1
+            $ coder_points -= 0.5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
             call ProblemWithBridge from _call_ProblemWithBridge_2
     return
 
@@ -524,6 +574,7 @@ label SecondPartShortWay:
     call NextToGate from _call_NextToGate_2
     return
 
+# TODO: deal with card shirts and sprites HERE
 # chapter 4.1
 label ChoiseInVillage:
     scene blank with pixellate
@@ -545,6 +596,7 @@ label ChoiseInVillage:
     call choice_in_village_menu from _call_choice_in_village_menu
     return
 
+# TODO: deal with card shirts and sprites HERE
 label choice_in_village_menu:
     $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
     menu:
@@ -571,6 +623,8 @@ label choice_in_village_menu:
             vas "Это гильдия! Идем!"
             return
     return  
+
+# TODO: deal with card shirts and sprites HERE
 # chapter 4.2
 label MeetingWithNas:
     scene blank with pixellate
@@ -599,16 +653,352 @@ label MeetingWithNas:
                 "Отправиться в данж":
                     return
     return
+
 label eat:
-    "IN DEVELOPMENT"
+    vas "Вкусно..."
+    nas "Вкусно!"
+    return
+
+# TODO: deal with card shirts and sprites HERE
+# Chapter 5.1
+label DialogueNearDungeon:
+    scene blank with pixellate
+    show vas normal at left
+    "Вы у входа в подземелье"
+    vas "Настя сказала, что в этом подземелье начали обитать очень сильные мобы..."
+    vas "Это очень сильно нарушает баланс моей игры... Интересно в чем же проблема?"
+    $ card_shirts = "head_and_question_mark"
+    menu: 
+        "Скоро узнаем...":
+            pass
+    vas "Верно..."
+    
+    $ card_shirts = "head_and_question_mark"
+    menu: 
+        "Войти в подземелье":
+            call inTheDungeon
+    return
+
+# TODO: deal with card shirts and sprites HERE
+label inTheDungeon:
+    scene blank with pixellate
+    show vas normal at right    
+    "Вы вошли в подземелье..."
+    "Пока вы пробирались в глубь подземелья, через мокрые скалы и темные лабиринты, Вам стало очень скучно и одиноко..."
+    $ card_shirts = "mouth"
+    menu:
+        "Поговорить с Васей о жизни":
+            pass
+    "Вы спросили почему Вася решил сделать свою игру"
+    vas "Мне всегда нравилось играть в видеоигры, они гораздо интереснее книг и фильмов..."
+    vas 'Поэтому я выучился на профессию "ГЕЙМРАЗРАБОТЧКА"'
+    $ card_shirts = "question_mark"    
+    menu:
+        "Чем занимается геймразработчик?":
+            pass
+    vas "На самом деле, это очень обширное название..."
+    vas "Геймразработчики делятся на разные специальности"
+    vas "Над игрой трудится большое количество людей - "
+    vas "Дизайнеры, Сценаристы, Программисты..."
+    show goblins at truecenter
+    "Ваш мирный и душевный диалог прервали монстры..." with vpunch
+    vas "ОСТОРОЖНО!!! Это те самые монстры, о которых говорили в Гильдии!"
+    "Между вами и монстрами произошла небольшая стычка..."
+    hide goblins 
+    return
+
+# TODO: deal with card shirts and sprites HERE
+# Chapter 5.2
+label BugFix:
+    show vas normal at center with dissolve
+    vas "Странно, такое ощущение, что мы даже не поцарапали врагов..."
+    vas "Давай глянем в код игры и посмотрим, что там творится..."
+    vas "Вот в чем проблема! Монстры просто бессмертны... Давай исправим этот баг!"
+    show vas normal at left with dissolve
+    $ card_shirts = "head_and_question_mark"
+    menu:
+        "За дело!":
+            pass
+    vas "Мы должны подобрать такое количество здоровья врагам, чтобы они не показались игроку слишком лёгкими"
+    vas "или слишком сложными..."
+
+    show vas normal at right with dissolve
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    menu:
+        "10 ХП":
+            vas "Неплохое решение... Но противники теперь будут слишком простые..."
+            $ coder_points += 0.5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "50 ХП":
+            vas "Отлично! Противники теперь будут сбалансированы!"
+            $ coder_points += 6
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "100 ХП":
+            vas "Плохое решение... Игрок не сумеет одолеть таких противников..."
+            $ coder_points -= 0.5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+    
+    "Вы выполнили роль геймдизайнера и программиста."
+    "Вы двинулись дальше... В глубь подземелья..."
+    
+    vas "После битвы с монстрами, игрока обычно ждет вознаграждение..."
+    vas "Давай дадим награды игроку за победу в битве!"
+    vas "Но какую награду лучше выбрать...?"
+
+    show vas normal at left with dissolve
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    menu:
+        "Зелье здоровья":
+            "Отлично! Теперь у игроков будет чем восполнить недостающее здоровье!"
+            $ coder_points += 6
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "Деньги":
+            "Хорошо, эти деньги игрок сможет потратить в трактире! Но ему будет сложно двигаться дальше без здоровья"
+            $ coder_points += 2
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "Ничего не давать":
+            "Плохое решение... Игроку будет жаль потраченных сил и времени..."
+            $ coder_points += 1
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+    
+    "Вы выполнили роль геймдизайнера."
+    vas "Хмм, по сюжету все монстры дальше станут сильнее обычного..."
+    vas "Нужно дать игроку хорошую экипировку, чтобы он смог пойти дальше!"
+    vas "Как думаешь, что следует вручить игроку еще?"
+    
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    menu:
+        "СУПЕР ГИГА УЛЬТРА МЕЧ":
+            "Противоречивое решение... Игрок с легкостью справится со всеми монстрами на следующих стычках..."
+            $ is_giga_sword_is_given = True
+            $ coder_points += 3
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "Сухую ветку":
+            "Плохое решение... Игрок не сможет преодолеть последующих монстров..."
+            $ coder_points += 1.5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "Двуручный топор":
+            "Отличное решение! Урон игрока возрос и ему не будет скучно в следующих стычках!"
+            $ coder_points += 6
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+    
+    "Вы выполнили роль геймдизайнера."
+    vas "Супер! Игрок укомплектован и может двигаться дальше!"
+    "Вы двинулись дальше..."
+    return
+
+# TODO: deal with card shirts and sprites HERE
+# Chapter 5.3
+label TheWayToBoss:
+    scene blank
+    show vas normal at right with dissolve
+    "Пока вы шли по пещерам, у вас снова завязался душевный диалог"
+    vas "А! Точно! Я же не договорил!"
+    vas "Я окончил Уральский федеральный университет."
+    vas 'Учился на специальности "программная инженерия"!'
+    vas "Я хотел стать программистом, который пишет код для игр, и сделать свою игру... Выучил C#!"
+    vas "Учёба мне далась легко. Я выбирал только те курсы, которые были мне интересны и соответствовали моей будущей профессии."
+    vas "Я выбрал пары по тому формату (очно/онлайн), по которому мне было удобно..."
+    vas "Поэтому я все успевал и получал много баллов за работы!"
+    "Вы с упоением слушали Васину речь..."
+    "Но вдруг встретили какое-то непонятное существо..."
+    show dummy at center
+    vas "Смотри..."
+    vas "Тут стоит..."
+    vas "Лама???"
+    vas "Такое ощущение, что она не вписывается в лор подземелья..."
+    vas "Что будем делать?"
+    
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    menu:
+        "Поменяем ламу на гоблина":
+            'Хорошее решение! Не стоит забывать, что наше подземелье называется "Подземелье гоблинов"'
+            $ coder_points += 3
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "Оставим ламу, в качестве пасхалки":
+            "Хорошее решение! Мы можем оставить эту Ламу, как пасхалку для игроков!"
+            $ coder_points += 1.5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+            $ is_the_lama_easter_egg = True
+        "Поменяем ламу на скелета":
+            "Отличное решение! Скелет сможет разнообразить геймплей."
+            $ coder_points += 6
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+    vas "Замечательно!!! Моя игра становится все интереснее и интереснее!"
+    vas "Остается совсем немного! Пойдемте вперед!"
+    hide dummy
+    "Вы пошли вперед..."
+    vas "Программист - пишет код для игры, оптимизирует ее..."
+    vas "Добавляет механики в игру, придуманные геймдизайнером..."
+    vas 'Геймдизайнер отвечает за сюжет игры, ее "интересность" и "необычность".'
+    vas "На плечах геймдизайнера лежит задача заинтересовать игрока, увлечь его геймлпеем, сделать игру уникальной!"
+    vas 'Дизайнер делает так, чтобы игра выглядела "сочно" и "вкусно".'
+    vas 'Все эти специальности подходят под профессию "ГЕЙМРАЗРАБОТЧИКА"'
+    vas "Поэтому очень важно определиться с тем, что тебе больше нравится!"
+    vas "А какая специальность тебе больше нравится в геймдеве?"
+
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    menu: 
+        "Программист":
+            "Чтобы выучится на программиста тебе следует подучить языки программирования, например C# / C++ / Java / Swift и другие..."
+        "Геймдизайнер":
+            "Чтобы выучится на геймдизайнера, тебе следует узнать, как устроены игры, уметь писать интересные сценарии и д.р"
+        "Дизайнер":
+            "Чтобы выучится на дизайнера тебе нужно уметь делать 3D модели / 2D модели / уметь использовать спецэффекты и д.р"
+    return
+
+# chapter 5.4
+label NearBoss:
+    scene blank with pixellate
+    "Вы наткнулись на ворота..."
+    show vas normal at left with dissolve
+    vas "Мы пришли к главному боссу этого подземелья!"
+    vas "Хмм... Странно... Эти ворота не должны выглядеть так..."
+    show strange_boss_gates at truecenter
+    vas "Давайте подберем воротам другую стилистику!"
+    
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ rightChoice = False
+    menu:
+        "Милые розовые ворота":
+            "Плохое решение... Эти ворота очень сильно выбиваются из общей стилистики игры..."
+            $ coder_points += 1
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "Брутальные металлические двери":
+            "Отличное решение! Эти ворота идеально вписываются в общую стилистику подземелья!"
+            $ coder_points += 6
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+            $ rightChoice = True
+        "Эпичный демонический портал":
+            "Хорошее решение! Но тебе не кажется странным, что демонические ворота находятся в подземелье гоблинов?"
+            $ coder_points += 2
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+    if(rightChoice): 
+        hide strange_boss_gates
+        show normal_boss_gates at truecenter 
+    "Вы выполнили работу дизайнера"
+    vas "Теперь можно отправляться на босса..."
+    vas "Вперёд!!!"
+    $ card_shirts = "head_and_question_mark"
+    menu:
+        "Вперёд!":
+            return
+    return
+
+# Chapter 5.5
+label Boss:
+    scene blank with pixellate
+    show vas normal at right with dissolve
+    "Вы столкнулись с ужасающим существом..."
+    show dummy at center 
+    "Вы даже не сразу поняли, что это именно босс..."
+    "Вас встретила непонятная субстанция..."
+    vas "О нет! Все как я и думал..."
+    vas "Босс подземелья весь поражен ошибками в коде... Его настройки все слетели..."
+    vas 'Давай "починим" его! Тебе как раз понадобятся все навыки геймразработчика'
+    vas 'Для начала следует "присвоить" боссу правильные текстуры'
+
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ rightChoice = False
+    while(not rightChoice):
+        menu:
+            "Текстура скелета":
+                "Вы ошиблись. Всю текстуру скелета перекосило. Попробуйте снова..."
+                $ coder_points -= 0.5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+            "Текстура тёмного мага":
+                "Вы ошиблись. Всю текстуру мага перекосило. Попробуйте снова..."
+                $ coder_points -= 0.5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+            "Текстура гоблина":
+                vas "Так держать!"
+                $ coder_points += 5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+                $ rightChoice = True
+                
+    vas "Теперь давайте пропишем ему количество здоровья..."  
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ rightChoice = False
+    while(not rightChoice):
+        menu:
+            "1000 хп":
+                vas "Так держать!"
+                $ coder_points += 5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+                $ rightChoice = True
+            "100 хп":
+                vas "Босс получается, как сильный моб..." 
+                vas "Играть не интересно. Попробуй снова!"
+                $ coder_points -= 0.5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+            "10 хп":
+                vas "Босс получается, совесем скучным! Даже у гоблинов больше здоровья!" 
+                vas "Попробуй снова!"
+                $ coder_points -= 0.5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+
+    vas "Какое оружие по сценарию должен использовать король гоблинов?"   
+    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ rightChoice = False
+    while(not rightChoice):
+        menu:
+            "Шпагу":
+                vas "Он же гоблин! Какая шпага?"
+                $ coder_points -= 0.5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+            "Царский щит":
+                vas "А как он будет атаковать?"
+                $ coder_points -= 0.5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}") 
+            "Посох с черепом":
+                vas "Так держать!" 
+                $ coder_points += 5
+                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+                $ rightChoice = True
+
+    vas "Фух, это было не просто... Но ты справился!"
+    vas "Это было просто нечто! Спасибо тебе большое!"
+    vas "Остается только победить этого босса!"
+    vas "Вперёд!"
+    if(is_giga_sword_is_given):
+        "Вы моментально победили босса, потому что у вас был СУПЕР ГИГА УЛЬТРА МЕЧ!" 
+        "Но вы чувствуете, что поработали не зря!"
+    else:
+        "Вы долго сражались с этим боссом. Но все-таки победили! Вы поработали не зря!"
+    hide dummy
+    vas "Неужели! В игре больше нет ошибок и багов!"
+    vas "Я очень тебе благодарен!"
+    vas "Теперь я могу опубликовать игру на площадках!"
+    vas "Мне не терпится узнать, какие оценки она соберет!"
+    # lama
+    show dummy at truecenter 
+    "Спустя какое-то время, Вася выложил игру на разные площадки..."
+    if(coder_points < 16):
+        "Васина игра не возымела большой популярности. Но Вася получил большой опыт. И начинает разрабатывать вторую часть игры!"
+        "И все это ваша заслуга!"
+    elif (16 <= coder_points < 22):
+        "Васину игру хорошо оценили игроки. Фанаты требуют второй части! И все это ваша заслуга!"
+    else:
+        "Васину игра взлетела по популярности среди игроков. Она рвет все рекорды по онлайнам. И все благодаря вам!"
     return
 
 label variables:
     $ coder_points = 0.0
     $ card_shirts = ""
     $ withoutWheel = False
+    $ is_giga_sword_is_given = False
+    $ is_the_lama_easter_egg = False
+    $ flag = False
     return
 
-label end:
-    "THE END!"
+
+label End:
+    show black with fade
+    "Конец!"
+    "Над игрой работали: {w=1.2} {nw}"
+    "Программист - Матушкин Антон {w=1.5} {nw}"
+    "Тимлид - Мезев Даниил {w=1.5} {nw}"
+    "Геймдизайнер - Кабицкий Георгий {w=1.5} {nw}"
+    "Аналитик - Лещев Даниил {w=1.5} {nw}"
+    "Сценарист - Воронцов Егор {w=1.5} {nw}"
     return
