@@ -991,6 +991,7 @@ label variables:
     $ flag = False
     return
 
+
 label End:
     show black with fade
     "Конец!"
