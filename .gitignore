@@ -5,3 +5,4 @@ traceback.txt
 .vscode
 .saves
 .cache
+*.rpyc
