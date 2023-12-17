@@ -7,15 +7,16 @@ define petr = Character("Дед Петр", color="#fbff00ff")
 define dar = Character("Дарья Дмитриевна", color="#e600ffff")
 
 # background images
-image portal = im.Scale("bg/portal.png", 1920, 1080)
+image portal = im.Scale("Introduction/portal.png", 1920, 1080)
 image blank = im.Scale("bg/blank background.jpg", 1920, 1080)
 
 # character sprites
 image dummy = im.Scale("character/dummy.png.", 768, 768)
-image petr normal = im.Scale("SecondChapter/old man.png.", 328, 808)
-image vas normal = im.Scale("FirstChapter/vasya.png.", 326, 805)
-image vasya_at_the_computer = im.Scale("bg/Vasya at the computer.png", 1920, 1080)
-image vasya_at_the_computer_surprised = im.Scale("bg/Vasya at the computer with a surprised face.png", 1920, 1080)
+image vas normal = im.Scale("character/vasya.png.", 326, 805)
+image petr normal = im.Scale("character/old man.png.", 328, 808)
+image dar normal = im.Scale("character/dummy.png.", 768, 768) # sprite
+image vasya_at_the_computer = im.Scale("Introduction/Vasya at the computer.png", 1920, 1080)
+image vasya_at_the_computer_surprised = im.Scale("Introduction/Vasya at the computer with a surprised face.png", 1920, 1080)
 
 # mobs sprites
 image goblins = im.Scale("images/ThirdChapter/DungeonSection/goblins.png", 960, 670)
@@ -27,14 +28,20 @@ image goblin3 = im.Scale("images/ThirdChapter/DungeonSection/goblin 3.png", 317,
 image forest_and_road_purple_wheel_with_vasya = im.Scale("FirstChapter/forest and road final without wheel.png", 1920, 1080) 
 image forest_and_road_normal_with_vasya = im.Scale("FirstChapter/forest and road final.png", 1920, 1080)
 image forest_and_road_purple_wheel_without_vasya = im.Scale("FirstChapter/forest and road final without wheel without vasya.png", 1920, 1080)
-image forest_without_vasa = im.Scale("bg/forest_without_vasa.png", 1920, 1080)
-image petrHouse = im.Scale("SecondChapter/home.png", 1920, 1080)
+image forest_without_vasa = im.Scale("FirstChapter/forest_without_vasa.png", 1920, 1080)
+image petrHouse = im.Scale("SecondChapter/House.png", 1920, 1080)
+
 image dungeon_at_day = im.Scale("ThirdChapter/DungeonSection/cave sun day.png", 1920, 1080)
 image dungeon_at_nigth = im.Scale("ThirdChapter/DungeonSection/cave moon night.png", 1920, 1080)
 image vilage_gate = im.Scale("ThirdChapter/DungeonSection/Gate.png", 1920, 1080)
 image bug_with_night = im.Scale("ThirdChapter/DungeonSection/cave moon day.png", 1920, 1080)
-image river_without_bridge = im.Scale("ThirdChapter/river_without_bridge.png", 1920, 1080) #нужен спрайт
-image forest = im.Scale("ThirdChapter/forest.jpg", 1920, 1080) #нужен спрайт
+
+image river_without_bridge = im.Scale("ThirdChapter/RiverSection/river without bridge.png", 1920, 1080)
+image river_with_bridge = im.Scale("ThirdChapter/RiverSection/river with bridge.png", 1920, 1080)
+image one_road = im.Scale("ThirdChapter/RiverSection/One road.png", 1920, 1080)
+image two_roads_1 = im.Scale("ThirdChapter/RiverSection/two road.png", 1920, 1080)
+image two_roads_2 = im.Scale("ThirdChapter/RiverSection/two road 2.png", 1920, 1080)
+
 image normal_boss_gates = im.Scale("FifthChapter/normalGates.jpg", 1920*0.5, 1080*0.5) #нужен спрайт
 image strange_boss_gates = im.Scale("FifthChapter/StrangeGates.png", 1920*0.5, 1080*0.5) #нужен спрайт
 # The game starts here.
@@ -449,7 +456,7 @@ label ChoosingSolution:
 label Right:
     stop music
     play music "audio/Overworld/World Travelers.ogg" fadein 0.5 volume 0.04 loop
-    $ card_shirts = 'mouth | head_and_question_mark | eyes'
+    $ card_shirts = 'question_mark | two_man | eyes'
     menu:
         "Спросить у Деда Петра путь.":
             "Дед Петр начал вам рассказывать, как добраться до деревни."
@@ -461,10 +468,9 @@ label Right:
             $ card_shirts = 'mouth'
             menu:
                 "Тогда, поехали!":
-                    scene forest with fade
+                    scene two_roads_1 with fade
                     "Вы ехали, пока не наткнулись на развилку."
             show vas normal at left with Dissolve(.5)
-            vas "Какой путь нам лучше выбрать?"
             $ withPetr = False
             return
         "Взять с собой в путь Деда Петра.":
@@ -483,6 +489,7 @@ label Right:
     return
 
 label RoadToVillage:
+    vas "Какой путь нам лучше выбрать?"
     $ card_shirts = 'left_arrow | right_arrow'
     $ rightChoice = False
     while(not rightChoice):
@@ -492,6 +499,8 @@ label RoadToVillage:
             "Вправо.":
                 "Правильный путь, вы поехали дальше."
                 $ rightChoice = True
+    
+    scene two_roads_2 with fade
     vas "Какой путь нам лучше выбрать?"
     
     $ card_shirts = 'left_arrow | right_arrow'
@@ -503,11 +512,11 @@ label RoadToVillage:
                 $ rightChoice = True    
             "Вправо.":
                 "Неправильно, вы потеряли время на неверный путь."
+    scene river_without_bridge with fade
     "Вы наткнулись на речку, где должен был быть мостик, но по какой-то причине его нет и показывается странную ошибку."
     vas "Что-то странное, тут должен быть мостик, но его нет."
     vas "Тут ошибка, показывает что с кодом игры что-то не так..."
     vas "Нужно правильный вариант кода, при котором мостик появится."
-    scene river_without_bridge with fade
     return
 
 # TODO: deal with menu section here.
@@ -521,6 +530,7 @@ label ProblemWithBridge:
             call ProblemWithBridge from _call_ProblemWithBridge_1
         "GameObject Bridge = Instantiate(bridgePrefab, new Vector3(x, y, z), Quaternion.identity);":
             "Правильно, вы нашли верный код!"
+            scene river_with_bridge with dissolve
             vas "Проблема решена!"
             vas "Теперь можно отправляться дальше!"
             $ coder_points += 2
@@ -530,10 +540,11 @@ label ProblemWithBridge:
             $ coder_points -= 0.5
             $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
             call ProblemWithBridge from _call_ProblemWithBridge_2
+        
     return
 
 label SecondPartLongWay:
-    scene forest with fade
+    scene two_roads_2 with dissolve
     show vas normal at left with Dissolve(.5)
     vas "Какой путь нам лучше выбрать?"
     
@@ -546,7 +557,8 @@ label SecondPartLongWay:
                 $ rightChoice = True
             "Влево":
                 "Неправильно, вы потеряли время на неверный путь."
-    
+
+    scene two_roads_1 with dissolve
     vas "Какой путь нам лучше выбрать?"
     $ card_shirts = 'left_arrow | right_arrow'
     $ rightChoice = False
@@ -557,6 +569,8 @@ label SecondPartLongWay:
                 $ rightChoice = True
             "вправо":
                 "Неправильно, вы потеряли время на неверный путь."
+
+    scene two_roads_2 with dissolve
     vas "Какой путь нам лучше выбрать?"
     $ card_shirts = 'up_arrow | left_arrow'
     $ rightChoice = False
@@ -633,7 +647,7 @@ label MeetingWithDar:
     show vas normal at right with dissolve
     vas "Нам нужно подойти к стойке администрации, чтобы сообщить, что мы уже прибыли."
     "Вы подошли к стойке"
-    show dummy at left with dissolve
+    show dar normal at left with dissolve
     dar "Здравствуйте!" 
     dar "Меня зовут Дарья Дмитриевна, я представитель гильдии."
     dar "Зачем вы пришли?"
@@ -643,7 +657,7 @@ label MeetingWithDar:
     $ card_shirts = "dangerous_place | mouth"
     menu:
         "Отправиться в данж.":
-        "Дарья Дмитриевна показала вам дорогу"
+            "Дарья Дмитриевна показала вам дорогу"
             return
         "Перекусить.":
             dar "Давайте перекусим"
