@@ -4,7 +4,7 @@
 
 define vas = Character("Вася", color="#00e4fd")
 define petr = Character("Дед Петр", color="#fbff00ff")
-define dar = Character("Дарья Дмитриевна", color="#e600ffff")
+define dar = Character("Дарья", color="#e600ffff")
 
 # background images
 image portal = im.Scale("Introduction/portal.png", 1920, 1080)
@@ -14,7 +14,7 @@ image blank = im.Scale("bg/blank background.jpg", 1920, 1080)
 image dummy = im.Scale("character/dummy.png.", 768, 768)
 image vas normal = im.Scale("character/vasya.png.", 326, 805)
 image petr normal = im.Scale("character/old man.png.", 328, 808)
-image dar normal = im.Scale("character/dummy.png.", 768, 768) # sprite
+image dar normal = im.Scale("character/girl.png.", 328, 808)
 image vasya_at_the_computer = im.Scale("Introduction/Vasya at the computer.png", 1920, 1080)
 image vasya_at_the_computer_surprised = im.Scale("Introduction/Vasya at the computer with a surprised face.png", 1920, 1080)
 
@@ -41,6 +41,11 @@ image river_with_bridge = im.Scale("ThirdChapter/RiverSection/river with bridge.
 image one_road = im.Scale("ThirdChapter/RiverSection/One road.png", 1920, 1080)
 image two_roads_1 = im.Scale("ThirdChapter/RiverSection/two road.png", 1920, 1080)
 image two_roads_2 = im.Scale("ThirdChapter/RiverSection/two road 2.png", 1920, 1080)
+
+image village = im.Scale("FourthChapter/village.png", 1920, 1080)
+image library = im.Scale("FourthChapter/library.png", 1920, 1080)
+image butcher_shop = im.Scale("FourthChapter/butcher shop.png", 1920, 1080)
+image tavern = im.Scale("FourthChapter/tavern.png", 1920, 1080)
 
 image normal_boss_gates = im.Scale("FifthChapter/normalGates.jpg", 1920*0.5, 1080*0.5) #нужен спрайт
 image strange_boss_gates = im.Scale("FifthChapter/StrangeGates.png", 1920*0.5, 1080*0.5) #нужен спрайт
@@ -591,13 +596,13 @@ label SecondPartShortWay:
 # TODO: deal with card shirts and sprites HERE
 # chapter 4.1
 label ChoiseInVillage:
-    scene blank with pixellate
+    scene village with pixellate
     show petr normal at right
     show vas normal at left
     "Вы зашли в деревню и начали искать гильдию."
     petr "Здесь наши пути расходятся, я выполнил свое задание. Удачи вам."
 
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ card_shirts = "mouth | head_and_question_mark"
     menu:
         "Вам тоже удачи!":
             "Вы отправились искать гильдию."
@@ -612,52 +617,58 @@ label ChoiseInVillage:
 
 # TODO: deal with card shirts and sprites HERE
 label choice_in_village_menu:
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ card_shirts = "book | hatchet | sword"
     menu:
         "Библиотека":
+            scene library with pixellate
+            show vas normal at right
             vas "Хмм, библиотека пустует... В ней нет посетителей..."
             vas "Но тут есть записка! Давайте почитаем, что тут написано!"
-            """Посетителей становится все меньше, потому что все боятся заходить в нашу деревню...
-            Я считаю, что это из-за этих проклятых, очень сильных, гоблинов... 
-            Наша библиотека вынуждена закрыться..."""
+            call screen paper_note("""Посетителей становится все меньше, потому что все боятся заходить в нашу деревню...
+                        Я считаю, что это из-за этих проклятых, очень сильных, гоблинов... 
+                        Наша библиотека вынуждена закрыться...""")
+
             vas "Ладно, похоже тут никого мы не найдем."
-            # picture
+            scene village with pixellate
             call choice_in_village_menu from _call_choice_in_village_menu_1
         "Мясная лавка":
+            scene butcher_shop with pixellate
+            show vas normal at left
             vas "Лавка выглядит заброшенной..."
             vas "Но тут есть какая-то записка! Давайте прочитаем, что тут написано!"
-            """***Наша лавка пришла в упадок...
-            Все из-за сильных гоблинов, которые воруют наш скот...
-            По этой причине мы вынуждены закрыться...
-            Всего хорошего."""
+            call screen paper_note("""Наша лавка пришла в упадок...
+                        Все из-за сильных гоблинов, которые воруют наш скот...
+                        По этой причине мы вынуждены закрыться...
+                        Всего хорошего.""")
+                        
             vas "Ладно, похоже здесь никого мы точно не найдем."
             # picture
+            scene village with pixellate
             call choice_in_village_menu from _call_choice_in_village_menu_2
         "Гильдия":
+            show vas normal at right with dissolve
             vas "Это гильдия! Идем!"
+            scene tavern with pixellate
             return
     return  
 
 # TODO: deal with card shirts and sprites HERE
 # chapter 4.2
 label MeetingWithDar:
-    scene blank with pixellate
-    show vas normal at center
-    "Вы зашли в здание и оказались правы - это гильдия."
-    show vas normal at right with dissolve
-    vas "Нам нужно подойти к стойке администрации, чтобы сообщить, что мы уже прибыли."
-    "Вы подошли к стойке"
     show dar normal at left with dissolve
-    dar "Здравствуйте!" 
-    dar "Меня зовут Дарья Дмитриевна, я представитель гильдии."
+    show vas normal at right with dissolve
+    "Вы зашли в здание и оказались правы - это гильдия."
+    show vas normal at center with dissolve
+    dar "Здравствуйте, путники!" 
+    dar "Меня зовут Дарья, я представитель гильдии."
     dar "Зачем вы пришли?"
     vas "Мы выполняем задание от вашей деревни. Доставляем магическое оружие для ваших авантюристов."
     dar "Хорошо. Наверное вы устали с дороги, не хотите перекусить?"
     
-    $ card_shirts = "dangerous_place | mouth"
+    $ card_shirts = "dangerous_place | food"
     menu:
         "Отправиться в данж.":
-            "Дарья Дмитриевна показала вам дорогу"
+            "Дарья показала вам дорогу"
             return
         "Перекусить.":
             dar "Давайте перекусим"
@@ -666,11 +677,15 @@ label MeetingWithDar:
             $ card_shirts = "dangerous_place"
             menu:
                 "Отправиться в данж":
-                    "Дарья Дмитриевна показала вам дорогу"
+                    "Дарья показала вам дорогу"
                     return
     return
 
 label eat:
+    scene black with fade
+    scene tavern with fade
+    show dar normal at left
+    show vas normal at center
     vas "Вкусно..."
     dar "Вкусно!"
     return
