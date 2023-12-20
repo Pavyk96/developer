@@ -224,7 +224,6 @@ screen choice(items):
                     style_prefix "choice_button"
                     minimum 464, 732
                     idle_background "images/cards/" + card_shirt[i] + ".png"
-                    # hover_background "images/cards/shirt.png"
                     hover_background "images/cards/" + card_shirt[i] + ".png"
                     hover_sound "audio/SFX/Button_hover.ogg"
                     text items[i].caption align 0.5, 0.08
@@ -246,6 +245,22 @@ style choice_button is default:
 
 style choice_button_text is default:
     properties gui.button_text_properties("choice_button")
+
+
+## Paper Note screen ###########################################################
+
+screen paper_note(request_text):
+    fixed:
+        xysize (500, 500)
+        add "FourthChapter/paper.png" pos (500, 50)
+        text "[request_text]" pos (680, 350) font "fonts/NeedleteethSP_0.otf" size 55 color "#000000"
+        button:
+            pos (1100, 910)
+            xysize (78, 50)
+            hover_sound "audio/SFX/Button_hover.ogg"
+
+            text "Назад" font "fonts/NeedleteethSP_0.otf" size 55 color "#4D4D4D" hover_color "#000000"
+            action Return()
 
 
 ## Quick Menu screen ###########################################################
