@@ -215,7 +215,6 @@ define gui.choice_button_text_size = gui.menu_text_size
 define gui.choice_button_text_xalign = 0.5
 define gui.choice_button_text_yalign = 0.5
 define gui.choice_button_text_idle_color = '#343434'
-# define gui.choice_button_text_hover_color = "#000000"
 define gui.choice_button_text_hover_color = "#000000"
 define gui.choice_button_text_insensitive_color = '#8888887f'
 
