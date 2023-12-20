@@ -524,7 +524,6 @@ label RoadToVillage:
     vas "Нужно правильный вариант кода, при котором мостик появится."
     return
 
-# TODO: deal with menu section here.
 label ProblemWithBridge:
     $ card_shirts = 'code4 | code5 | code7'
     menu:
@@ -593,7 +592,6 @@ label SecondPartShortWay:
     call NextToGate from _call_NextToGate_2
     return
 
-# TODO: deal with card shirts and sprites HERE
 # chapter 4.1
 label ChoiseInVillage:
     scene village with pixellate
@@ -615,7 +613,6 @@ label ChoiseInVillage:
     call choice_in_village_menu from _call_choice_in_village_menu
     return
 
-# TODO: deal with card shirts and sprites HERE
 label choice_in_village_menu:
     $ card_shirts = "book | hatchet | sword"
     menu:
@@ -642,7 +639,6 @@ label choice_in_village_menu:
                         Всего хорошего.""")
                         
             vas "Ладно, похоже здесь никого мы точно не найдем."
-            # picture
             scene village with pixellate
             call choice_in_village_menu from _call_choice_in_village_menu_2
         "Гильдия":
@@ -652,7 +648,6 @@ label choice_in_village_menu:
             return
     return  
 
-# TODO: deal with card shirts and sprites HERE
 # chapter 4.2
 label MeetingWithDar:
     show dar normal at left with dissolve
