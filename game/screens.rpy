@@ -281,14 +281,14 @@ screen quick_menu():
             xalign 0.5
             yalign 1.0
 
-            textbutton _("Back") action Rollback()
-            textbutton _("History") action ShowMenu('history')
-            textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Auto") action Preference("auto-forward", "toggle")
-            textbutton _("Save") action ShowMenu('save')
-            textbutton _("Q.Save") action QuickSave()
-            textbutton _("Q.Load") action QuickLoad()
-            textbutton _("Prefs") action ShowMenu('preferences')
+            textbutton _("Назад") action Rollback()
+            textbutton _("История") action ShowMenu('history')
+            textbutton _("Пропустить") action Skip() alternate Skip(fast=True, confirm=True)
+            textbutton _("Автo") action Preference("auto-forward", "toggle")
+            textbutton _("Сохранить") action ShowMenu('save')
+            textbutton _("Б.Сохранение") action QuickSave()
+            textbutton _("Б.Загрузка") action QuickLoad()
+            textbutton _("Настройки") action ShowMenu('preferences')
 
 
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
@@ -318,47 +318,35 @@ style quick_button_text:
 ## to other menus, and to start the game.
 
 screen navigation():
+    if not main_menu:
+        vbox:
+            xpos gui.navigation_xpos
+            yalign 0.5
+            spacing gui.navigation_spacing
 
-    vbox:
-        style_prefix "navigation"
+            textbutton _("Продолжить") hover_sound "audio/SFX/Gui_button_hover.ogg" action Return() 
+            textbutton _("История") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("history")
+            textbutton _("Сохранить") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("save")
+            textbutton _("Загрузить") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("load")
+            textbutton _("Настройки") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("preferences")
+            textbutton _("Главное меню") hover_sound "audio/SFX/Gui_button_hover.ogg" action MainMenu()
+            textbutton _("Помощь") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("help")
+            textbutton _("Выйти") hover_sound "audio/SFX/Gui_button_hover.ogg" action Quit(confirm=not main_menu)
+            if _in_replay:
+                    textbutton _("Закончить повтор") hover_sound "audio/SFX/Gui_button_hover.ogg" action EndReplay(confirm=True)
 
-        xpos gui.navigation_xpos
-        yalign 0.5
 
-        spacing gui.navigation_spacing
-
-        if main_menu:
-
-            textbutton _("Start") hover_sound "audio/SFX/Gui_button_hover.ogg" action Start() 
-
-        else:
-            
-            textbutton _("History") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("history")
-
-            textbutton _("Save") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("save")
-
-        textbutton _("Load") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("load")
-
-        textbutton _("Preferences") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("preferences")
-
-        if _in_replay:
-            textbutton _("End Replay") hover_sound "audio/SFX/Gui_button_hover.ogg" action EndReplay(confirm=True)
-
-        elif not main_menu:
-            textbutton _("Main Menu") hover_sound "audio/SFX/Gui_button_hover.ogg" action MainMenu()
-
-        textbutton _("About") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("about")
-
-        if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
-
-            ## Help isn't necessary or relevant to mobile devices.
-            textbutton _("Help") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("help")
-
-        if renpy.variant("pc"):
-
-            ## The quit button is banned on iOS and unnecessary on Android and
-            ## Web.
-            textbutton _("Quit") hover_sound "audio/SFX/Gui_button_hover.ogg" action Quit(confirm=not main_menu)
+    if main_menu:
+        hbox:
+            style_prefix "navigation"
+            xpos 135
+            yalign 0.98
+            spacing -85
+            textbutton _("Начать") hover_sound "audio/SFX/Gui_button_hover.ogg" action Start() 
+            textbutton _(" Загрузить") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("load")
+            textbutton _("Настройки") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("preferences")
+            textbutton _("  Помощь") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("help")
+            textbutton _("  Выйти") hover_sound "audio/SFX/Gui_button_hover.ogg" action Quit(confirm=not main_menu)
 
 style navigation_button is gui_button
 style navigation_button_text is gui_button_text
@@ -368,6 +356,8 @@ style navigation_button:
     properties gui.button_properties("navigation_button")
 
 style navigation_button_text:
+    color "#ffffff"
+    hover_color "#ffffff64"
     properties gui.button_text_properties("navigation_button")
 
 
@@ -397,8 +387,8 @@ screen main_menu():
         vbox:
             style "main_menu_vbox"
 
-            text "[config.name!t]":
-                style "main_menu_title"
+            # text "[config.name!t]":
+                # style "main_menu_title"
 
             text "[config.version]":
                 style "main_menu_version"
@@ -429,6 +419,11 @@ style main_menu_title:
     properties gui.text_properties("title")
 
 style main_menu_version:
+    color "#00000f"
+    size 30
+    font "fonts/NeedleteethSP_0.otf" 
+    xpos 55
+    ypos 35    
     properties gui.text_properties("version")
 
 
@@ -497,10 +492,11 @@ screen game_menu(title, scroll=None, yinitial=0.0):
 
     use navigation
 
-    textbutton _("Return"):
-        style "return_button"
-        hover_sound "audio/SFX/Gui_button_hover.ogg"
-        action Return()
+    # textbutton _("Назад"):
+        
+        # style "return_button"
+        # hover_sound "audio/SFX/Gui_button_hover.ogg"
+        # action Return()
 
     label title
 
@@ -574,7 +570,7 @@ screen about():
     ## This use statement includes the game_menu screen inside this one. The
     ## vbox child is then included inside the viewport inside the game_menu
     ## screen.
-    use game_menu(_("About"), scroll="viewport"):
+    use game_menu(_("Сведения"), scroll="viewport"):
 
         style_prefix "about"
 
@@ -623,7 +619,7 @@ screen load():
 
 screen file_slots(title):
 
-    default page_name_value = FilePageNameInputValue(pattern=_("Page {}"), auto=_("Automatic saves"), quick=_("Quick saves"))
+    default page_name_value = FilePageNameInputValue(pattern=_("Страница {}"), auto=_("Автоматические сохранения"), quick=_("Быстрые сохранения"))
 
     use game_menu(title):
 
@@ -700,12 +696,12 @@ screen file_slots(title):
 
                 if config.has_sync:
                     if CurrentScreenName() == "save":
-                        textbutton _("Upload Sync"):
+                        textbutton _("Синхронизация"):
                             # action UploadSync()
                             hover_sound "audio/SFX/Gui_button_hover.ogg"
                             xalign 0.5
                     else:
-                        textbutton _("Download Sync"):
+                        textbutton _("Синхронизация"):
                             # action DownloadSync()
                             hover_sound "audio/SFX/Gui_button_hover.ogg"
                             xalign 0.5
@@ -765,16 +761,16 @@ screen preferences():
 
                     vbox:
                         style_prefix "radio"
-                        label _("Display")
-                        textbutton _("Window") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("display", "window")
-                        textbutton _("Fullscreen") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("display", "fullscreen")
+                        label _("Экран")
+                        textbutton _("Оконный") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("display", "window")
+                        textbutton _("Полноэкранный") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("display", "fullscreen")
 
                 vbox:
                     style_prefix "check"
-                    label _("Skip")
-                    textbutton _("Unseen Text") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("skip", "toggle")
-                    textbutton _("After Choices") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("after choices", "toggle")
-                    textbutton _("Transitions") hover_sound "audio/SFX/Gui_button_hover.ogg" action InvertSelected(Preference("transitions", "toggle"))
+                    label _("Пропустить")
+                    textbutton _("Непрочитанный текст") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("skip", "toggle")
+                    textbutton _("После выбора") hover_sound "audio/SFX/Gui_button_hover.ogg" action Preference("after choices", "toggle")
+                    textbutton _("Переходы") hover_sound "audio/SFX/Gui_button_hover.ogg" action InvertSelected(Preference("transitions", "toggle"))
 
                 ## Additional vboxes of type "radio_pref" or "check_pref" can be
                 ## added here, to add additional creator-defined preferences.
@@ -787,35 +783,35 @@ screen preferences():
 
                 vbox:
 
-                    label _("Text Speed")
+                    label _("Скорость Текста")
 
                     bar value Preference("text speed")
 
-                    label _("Auto-Forward Time")
+                    label _("Время Авто-Перемотки")
 
                     bar value Preference("auto-forward time")
 
                 vbox:
 
                     if config.has_music:
-                        label _("Music Volume")
+                        label _("Громкость Музыки")
 
                         hbox:
                             bar value Preference("music volume")
 
                     if config.has_sound:
 
-                        label _("Sound Volume")
+                        label _("Громкость звука")
 
                         hbox:
                             bar value Preference("sound volume")
 
                             if config.sample_sound:
-                                textbutton _("Test") action Play("sound", config.sample_sound)
+                                textbutton _("Тест") action Play("sound", config.sample_sound)
 
 
                     if config.has_voice:
-                        label _("Voice Volume")
+                        label _("Громкость голоса")
 
                         hbox:
                             bar value Preference("voice volume")
@@ -826,7 +822,7 @@ screen preferences():
                     if config.has_music or config.has_sound or config.has_voice:
                         null height gui.pref_spacing
 
-                        textbutton _("Mute All"):
+                        textbutton _("Заглушить всё"):
                             action Preference("all mute", "toggle")
                             style "mute_all_button"
                             hover_sound "audio/SFX/Gui_button_hover.ogg"
@@ -1014,11 +1010,11 @@ screen help():
 
             hbox:
 
-                textbutton _("Keyboard") hover_sound "audio/SFX/Gui_button_hover.ogg" action SetScreenVariable("device", "keyboard")
-                textbutton _("Mouse") hover_sound "audio/SFX/Gui_button_hover.ogg" action SetScreenVariable("device", "mouse")
+                textbutton _("Клавиатура") hover_sound "audio/SFX/Gui_button_hover.ogg" action SetScreenVariable("device", "keyboard")
+                textbutton _("Мышь") hover_sound "audio/SFX/Gui_button_hover.ogg" action SetScreenVariable("device", "mouse")
 
                 if GamepadExists():
-                    textbutton _("Gamepad") hover_sound "audio/SFX/Gui_button_hover.ogg" action SetScreenVariable("device", "gamepad")
+                    textbutton _("Геймпад") hover_sound "audio/SFX/Gui_button_hover.ogg" action SetScreenVariable("device", "gamepad")
 
             if device == "keyboard":
                 use keyboard_help
@@ -1031,105 +1027,64 @@ screen help():
 screen keyboard_help():
 
     hbox:
-        label _("Enter")
-        text _("Advances dialogue and activates the interface.")
-
-    hbox:
-        label _("Space")
-        text _("Advances dialogue without selecting choices.")
-
-    hbox:
-        label _("Arrow Keys")
-        text _("Navigate the interface.")
+        label _("Стрелки")
+        text _("Перемещение по диалогу.")
 
     hbox:
         label _("Escape")
-        text _("Accesses the game menu.")
+        text _("Открывает меню паузы.")
 
     hbox:
         label _("Ctrl")
-        text _("Skips dialogue while held down.")
+        text _("Пропускает диалог, пока зажат.")
 
     hbox:
         label _("Tab")
-        text _("Toggles dialogue skipping.")
-
-    hbox:
-        label _("Page Up")
-        text _("Rolls back to earlier dialogue.")
-
-    hbox:
-        label _("Page Down")
-        text _("Rolls forward to later dialogue.")
+        text _("Включает пропуск диалогов.")
 
     hbox:
         label "H"
-        text _("Hides the user interface.")
+        text _("Прячет интерфейс.")
 
     hbox:
         label "S"
-        text _("Takes a screenshot.")
-
-    hbox:
-        label "V"
-        text _("Toggles assistive {a=https://www.renpy.org/l/voicing}self-voicing{/a}.")
+        text _("Скриншот.")
 
     hbox:
         label "Shift+A"
-        text _("Opens the accessibility menu.")
+        text _("Открывает меню специальные возможности.")
 
 
 screen mouse_help():
 
     hbox:
-        label _("Left Click")
-        text _("Advances dialogue and activates the interface.")
+        label _("Левая кнопка")
+        text _("Продолжает диалог.")
 
     hbox:
-        label _("Middle Click")
-        text _("Hides the user interface.")
+        label _("Колесико")
+        text _("Прячет интерфейс.")
 
     hbox:
-        label _("Right Click")
-        text _("Accesses the game menu.")
-
-    hbox:
-        label _("Mouse Wheel Up\nClick Rollback Side")
-        text _("Rolls back to earlier dialogue.")
-
-    hbox:
-        label _("Mouse Wheel Down")
-        text _("Rolls forward to later dialogue.")
+        label _("Правая кнопка")
+        text _("Открывает игровое меню.")
 
 
 screen gamepad_help():
 
     hbox:
-        label _("Right Trigger\nA/Bottom Button")
-        text _("Advances dialogue and activates the interface.")
-
-    hbox:
-        label _("Left Trigger\nLeft Shoulder")
-        text _("Rolls back to earlier dialogue.")
-
-    hbox:
-        label _("Right Shoulder")
-        text _("Rolls forward to later dialogue.")
-
-
-    hbox:
-        label _("D-Pad, Sticks")
-        text _("Navigate the interface.")
+        label _("Правый триггер\nA/Нижняя кнопка")
+        text _("Перемещение по диалогу.")
 
     hbox:
         label _("Start, Guide")
-        text _("Accesses the game menu.")
+        text _("Выход в меню.")
 
     hbox:
-        label _("Y/Top Button")
-        text _("Hides the user interface.")
+        label _("Y/Верхняя кнопка")
+        text _("Прячет интерфейс.")
 
-    textbutton _("Calibrate") action GamepadCalibrate()
+    textbutton _("Калибровка") action GamepadCalibrate()
 
 
 style help_button is gui_button
@@ -1194,8 +1149,8 @@ screen confirm(message, yes_action, no_action):
                 xalign 0.5
                 spacing 150
 
-                textbutton _("Yes") hover_sound "audio/SFX/Gui_button_hover.ogg" action yes_action
-                textbutton _("No") hover_sound "audio/SFX/Gui_button_hover.ogg" action no_action
+                textbutton _("Да") hover_sound "audio/SFX/Gui_button_hover.ogg" action yes_action
+                textbutton _("Нет") hover_sound "audio/SFX/Gui_button_hover.ogg" action no_action
 
     ## Right-click and escape answer "no".
     key "game_menu" action no_action
@@ -1241,7 +1196,7 @@ screen skip_indicator():
         hbox:
             spacing 9
 
-            text _("Skipping")
+            text _("Пропускаем")
 
             text "▸" at delayed_blink(0.0, 1.0) style "skip_triangle"
             text "▸" at delayed_blink(0.2, 1.0) style "skip_triangle"
@@ -1550,10 +1505,10 @@ screen quick_menu():
             xalign 0.5
             yalign 1.0
 
-            textbutton _("Back") action Rollback()
-            textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Auto") action Preference("auto-forward", "toggle")
-            textbutton _("Menu") action ShowMenu()
+            textbutton _("Назад") action Rollback()
+            textbutton _("Пропустить") action Skip() alternate Skip(fast=True, confirm=True)
+            textbutton _("Авто") action Preference("auto-forward", "toggle")
+            textbutton _("Меню") action ShowMenu()
 
 
 style window:
