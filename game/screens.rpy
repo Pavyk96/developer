@@ -262,7 +262,6 @@ screen paper_note(request_text):
             text "Назад" font "fonts/NeedleteethSP_0.otf" size 55 color "#4D4D4D" hover_color "#000000"
             action Return()
 
-
 ## Quick Menu screen ###########################################################
 ##
 ## The quick menu is displayed in-game to provide easy access to the out-of-game
@@ -341,12 +340,12 @@ screen navigation():
             style_prefix "navigation"
             xpos 135
             yalign 0.98
-            spacing -85
+            spacing -100
             textbutton _("Начать") hover_sound "audio/SFX/Gui_button_hover.ogg" action Start() 
-            textbutton _(" Загрузить") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("load")
-            textbutton _("Настройки") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("preferences")
-            textbutton _("  Помощь") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("help")
-            textbutton _("  Выйти") hover_sound "audio/SFX/Gui_button_hover.ogg" action Quit(confirm=not main_menu)
+            textbutton _("Загрузить") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("load")
+            textbutton _(" Настройки") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("preferences")
+            textbutton _("    Помощь") hover_sound "audio/SFX/Gui_button_hover.ogg" action ShowMenu("help")
+            textbutton _("        Выйти") hover_sound "audio/SFX/Gui_button_hover.ogg" action Quit(confirm=not main_menu)
 
 style navigation_button is gui_button
 style navigation_button_text is gui_button_text
@@ -607,14 +606,14 @@ screen save():
 
     tag menu
 
-    use file_slots(_("Save"))
+    use file_slots(_("Сохранить"))
 
 
 screen load():
 
     tag menu
 
-    use file_slots(_("Load"))
+    use file_slots(_("Загрузить"))
 
 
 screen file_slots(title):
@@ -750,7 +749,7 @@ screen preferences():
 
     tag menu
 
-    use game_menu(_("Preferences"), scroll="viewport"):
+    use game_menu(_("Настройки"), scroll="viewport"):
 
         vbox:
 
@@ -914,7 +913,7 @@ screen history():
     ## Avoid predicting this screen, as it can be very large.
     predict False
 
-    use game_menu(_("History"), scroll=("vpgrid" if gui.history_height else "viewport"), yinitial=1.0):
+    use game_menu(_("История"), scroll=("vpgrid" if gui.history_height else "viewport"), yinitial=1.0):
 
         style_prefix "history"
 
@@ -942,7 +941,7 @@ screen history():
                     substitute False
 
         if not _history_list:
-            label _("The dialogue history is empty.")
+            label _("История диалогов пуста.")
 
 
 ## This determines what tags are allowed to be displayed on the history screen.
@@ -1001,7 +1000,7 @@ screen help():
 
     default device = "keyboard"
 
-    use game_menu(_("Help"), scroll="viewport"):
+    use game_menu(_("Помощь"), scroll="viewport"):
 
         style_prefix "help"
 
