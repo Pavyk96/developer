@@ -19,10 +19,17 @@ image vasya_at_the_computer = im.Scale("Introduction/Vasya at the computer.png",
 image vasya_at_the_computer_surprised = im.Scale("Introduction/Vasya at the computer with a surprised face.png", 1920, 1080)
 
 # mobs sprites
-image goblins = im.Scale("images/ThirdChapter/DungeonSection/goblins.png", 960, 670)
-image goblin1= im.Scale("images/ThirdChapter/DungeonSection/goblin 1.png", 276, 648)
-image goblin2 = im.Scale("images/ThirdChapter/DungeonSection/goblin 2.png", 321, 567)
-image goblin3 = im.Scale("images/ThirdChapter/DungeonSection/goblin 3.png", 317, 530)
+image goblins = im.Scale("character/goblins.png", 960, 670)
+image goblin1= im.Scale("character/goblin 1.png", 276, 648)
+image goblin2 = im.Scale("character/goblin 2.png", 321, 567)
+image goblin3 = im.Scale("character/goblin mage.png", 317, 530)
+image goblin_mage = im.Scale("character/goblin mage.png", 328*0.8, 808*0.8)
+image skeleton = im.Scale("character/skeleton.png", 331, 815)
+image monsters = im.Scale("character/monsters.png", 605, 841)
+image lama = im.Scale("character/lama fortnite.png", 412, 750)
+image lama05 = im.Scale("character/lama fortnite.png", 412*0.5, 750*0.5)
+image shapeless = im.Scale("character/shapeless monster.png", 904, 904)
+
 
 # enviroment sprites
 image forest_and_road_purple_wheel_with_vasya = im.Scale("FirstChapter/forest and road final without wheel.png", 1920, 1080) 
@@ -47,8 +54,17 @@ image library = im.Scale("FourthChapter/library.png", 1920, 1080)
 image butcher_shop = im.Scale("FourthChapter/butcher shop.png", 1920, 1080)
 image tavern = im.Scale("FourthChapter/tavern.png", 1920, 1080)
 
-image normal_boss_gates = im.Scale("FifthChapter/normalGates.jpg", 1920*0.5, 1080*0.5) #нужен спрайт
-image strange_boss_gates = im.Scale("FifthChapter/StrangeGates.png", 1920*0.5, 1080*0.5) #нужен спрайт
+image cave_entrance = im.Scale("FifthChapter/wall 4.png", 1920, 1080)
+image boss_cave = im.Scale("FifthChapter/cave.png", 1920, 1080)
+image cave1 = im.Scale("FifthChapter/wall 1.png", 1920, 1080)
+image cave2 = im.Scale("FifthChapter/wall 2.png", 1920, 1080)
+image cave3 = im.Scale("FifthChapter/wall 3.png", 1920, 1080)
+image pink_boss_gate = im.Scale("FifthChapter/pink gate.png", 1920, 1080)
+image metal_boss_gate = im.Scale("FifthChapter/metal gate.png", 1920, 1080)
+image demon_boss_gate = im.Scale("FifthChapter/demon gate.png", 1920, 1080)
+image itman = im.Scale("FifthChapter/it man.png", 1920, 1080)
+
+
 # The game starts here.
 label start:
     call variables from _call_variables
@@ -685,32 +701,34 @@ label eat:
     dar "Вкусно!"
     return
 
-# TODO: deal with card shirts and sprites HERE
 # Chapter 5.1
 label DialogueNearDungeon:
-    scene blank with pixellate
+    scene cave_entrance with pixellate
     show vas normal at left
     "Вы у входа в подземелье"
     vas "Дарья сказала, что в этом подземелье начали обитать очень сильные мобы..."
     vas "Это очень сильно нарушает баланс моей игры... Интересно в чем же проблема?"
-    $ card_shirts = "head_and_question_mark"
+    $ card_shirts = "mouth"
     menu: 
         "Скоро узнаем...":
             pass
     vas "Верно..."
     
-    $ card_shirts = "head_and_question_mark"
+    $ card_shirts = "cave"
     menu: 
         "Войти в подземелье":
             call inTheDungeon from _call_inTheDungeon
     return
 
-# TODO: deal with card shirts and sprites HERE
 label inTheDungeon:
-    scene blank with pixellate
+    scene cave2 with pixellate
     show vas normal at right    
     "Вы вошли в подземелье..."
-    "Пока вы пробирались в глубь подземелья, через мокрые скалы и темные лабиринты, Вам стало очень скучно и одиноко..."
+    "Вы пробирались вглубь подземелья"
+    "Через мокрые скалы, через темные лабиринты"
+    show vas normal at left with dissolve    
+
+    "Вам стало очень скучно и одиноко..."
     $ card_shirts = "mouth"
     menu:
         "Поговорить с Васей о жизни":
@@ -726,11 +744,11 @@ label inTheDungeon:
     vas "Геймразработчики делятся на разные специальности"
     vas "Над игрой трудится большое количество людей - "
     vas "Дизайнеры, Сценаристы, Программисты..."
-    show goblins at truecenter
+    show monsters at center
     "Ваш мирный и душевный диалог прервали монстры..." with vpunch
     vas "ОСТОРОЖНО!!! Это те самые монстры, о которых говорили в Гильдии!"
     "Между вами и монстрами произошла небольшая стычка..."
-    hide goblins 
+    hide monsters with dissolve 
     return
 
 # TODO: deal with card shirts and sprites HERE
@@ -741,7 +759,7 @@ label BugFix:
     vas "Давай глянем в код игры и посмотрим, что там творится..."
     vas "Вот в чем проблема! Монстры просто бессмертны... Давай исправим этот баг!"
     show vas normal at left with dissolve
-    $ card_shirts = "head_and_question_mark"
+    $ card_shirts = "mouth"
     menu:
         "За дело!":
             pass
@@ -749,7 +767,7 @@ label BugFix:
     vas "или слишком сложными..."
 
     show vas normal at right with dissolve
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ card_shirts = "hp10 | hp50 | hp100"
     menu:
         "10 ХП":
             vas "Неплохое решение... Но противники теперь будут слишком простые..."
@@ -765,14 +783,15 @@ label BugFix:
             $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
     
     "Вы выполнили роль геймдизайнера и программиста."
-    "Вы двинулись дальше... В глубь подземелья..."
-    
+    "Вы двинулись вглубь подземелья..."
+    scene cave1 with pixellate
+    show vas normal at center    
     vas "После битвы с монстрами игрока обычно ждет вознаграждение..."
     vas "Давай дадим награды игроку за победу в битве!"
     vas "Но какую награду лучше выбрать...?"
 
     show vas normal at left with dissolve
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ card_shirts = "health_potion | money | red_x"
     menu:
         "Зелье здоровья":
             "Отлично! Теперь у игроков будет чем восполнить недостающее здоровье!"
@@ -792,7 +811,7 @@ label BugFix:
     vas "Нужно дать игроку хорошую экипировку, чтобы он смог пойти дальше!"
     vas "Как думаешь, что следует вручить игроку еще?"
     
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ card_shirts = "mega_sword | stick | axe"
     menu:
         "СУПЕР ГИГА УЛЬТРА МЕЧ":
             "Противоречивое решение... Игрок с легкостью справится со всеми монстрами на следующих стычках..."
@@ -813,11 +832,14 @@ label BugFix:
     "Вы двинулись дальше..."
     return
 
-# TODO: deal with card shirts and sprites HERE
 # Chapter 5.3
 label TheWayToBoss:
-    scene blank
-    show vas normal at right with dissolve
+    scene cave3 with pixellate
+    show vas normal at left with dissolve
+    
+    stop music fadeout 0.5
+    play music "audio/Dungeons/Temple of Tomb.ogg" fadein 0.5 volume 0.5 loop
+
     "Пока вы шли по пещерам, у вас снова завязался душевный диалог"
     vas "А! Точно! Я же не договорил!"
     vas "Я окончил Уральский федеральный университет."
@@ -828,16 +850,18 @@ label TheWayToBoss:
     vas "Поэтому я все успевал и получал много баллов за работы!"
     "Вы с упоением слушали Васину речь..."
     "Но вдруг встретили какое-то непонятное существо..."
-    show dummy at center
+    show lama at center
     vas "Смотри..."
     vas "Тут стоит..."
     vas "Лама???"
     vas "Такое ощущение, что она не вписывается в лор подземелья..."
     vas "Что будем делать?"
     
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ card_shirts = "goblin_head | lama_head | skeleton_head"
     menu:
         "Поменяем ламу на гоблина":
+            hide lama
+            show goblin2 at center
             'Хорошее решение! Не стоит забывать, что наше подземелье называется "Подземелье гоблинов"'
             $ coder_points += 3
             $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
@@ -847,13 +871,17 @@ label TheWayToBoss:
             $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
             $ is_the_lama_easter_egg = True
         "Поменяем ламу на скелета":
+            hide lama
+            show skeleton at center
             "Отличное решение! Скелет сможет разнообразить геймплей."
             $ coder_points += 6
             $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
     vas "Замечательно!!! Моя игра становится все интереснее и интереснее!"
     vas "Остается совсем немного! Пойдемте вперед!"
-    hide dummy
+    
     "Вы пошли вперед..."
+    scene cave3 with pixellate
+    show vas normal at right with dissolve 
     vas "Программист пишет код для игры, оптимизирует ее..."
     vas "Добавляет механики в игру, придуманные геймдизайнером..."
     vas 'Геймдизайнер отвечает за сюжет игры, ее "интересность" и "необычность".'
@@ -863,7 +891,7 @@ label TheWayToBoss:
     vas "Поэтому очень важно определиться с тем, что тебе больше нравится!"
     vas "А какая специальность тебе больше нравится в геймдеве?"
 
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
+    $ card_shirts = "keyboard | 3paper | palette"
     menu: 
         "Программист":
             "Чтобы выучится на программиста тебе следует подучить языки программирования, например C# / C++ / Java / Swift и другие..."
@@ -875,37 +903,36 @@ label TheWayToBoss:
 
 # chapter 5.4
 label NearBoss:
-    scene blank with pixellate
-    "Вы наткнулись на ворота..."
+    scene pink_boss_gate with pixellate 
     show vas normal at left with dissolve
+    "Вы наткнулись на ворота..."
     vas "Мы пришли к главному боссу этого подземелья!"
     vas "Хмм... Странно... Эти ворота не должны выглядеть так..."
-    show strange_boss_gates at truecenter
     vas "Давайте подберем воротам другую стилистику!"
-    
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
-    $ rightChoice = False
+    $ card_shirts = "pink_gate | metal_gate | demon_gate"
+    $ choice = ""
     menu:
-        "Милые розовые ворота":
+        "Оставим эти":
             "Плохое решение... Эти ворота очень сильно выбиваются из общей стилистики игры..."
+            $ choice = "pink"
             $ coder_points += 1
             $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
         "Брутальные металлические двери":
+            scene metal_boss_gate with pixellate
+            show vas normal at right
             "Отличное решение! Эти ворота идеально вписываются в общую стилистику подземелья!"
             $ coder_points += 6
             $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
-            $ rightChoice = True
         "Эпичный демонический портал":
+            scene demon_boss_gate  with pixellate
+            show vas normal at right
             "Хорошее решение! Но тебе не кажется странным, что демонические ворота находятся в подземелье гоблинов?"
             $ coder_points += 2
             $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
-    if(rightChoice): 
-        hide strange_boss_gates
-        show normal_boss_gates at truecenter 
     "Вы выполнили работу дизайнера"
     vas "Теперь можно отправляться на босса..."
     vas "Вперёд!!!"
-    $ card_shirts = "head_and_question_mark"
+    $ card_shirts = "USSR"
     menu:
         "Вперёд!":
             return
@@ -913,99 +940,129 @@ label NearBoss:
 
 # Chapter 5.5
 label Boss:
-    scene blank with pixellate
-    show vas normal at right with dissolve
+    scene boss_cave with pixellate
+    show vas normal at left with dissolve
     "Вы столкнулись с ужасающим существом..."
-    show dummy at center 
+    show shapeless at center 
     "Вы даже не сразу поняли, что это именно босс..."
     "Вас встретила непонятная субстанция..."
     vas "О нет! Все как я и думал..."
-    vas "Босс подземелья весь поражен ошибками в коде... Его настройки все слетели..."
+    vas "Босс подземелья весь поражен ошибками в коде... Все его настройки слетели..."
     vas 'Давай "починим" его! Тебе как раз понадобятся все навыки геймразработчика'
     vas 'Для начала следует "присвоить" боссу правильные текстуры'
 
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
-    $ rightChoice = False
-    while(not rightChoice):
-        menu:
-            "Текстура скелета":
-                "Вы ошиблись. Всю текстуру скелета перекосило. Попробуйте снова..."
-                $ coder_points -= 0.5
-                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
-            "Текстура тёмного мага":
-                "Вы ошиблись. Всю текстуру мага перекосило. Попробуйте снова..."
-                $ coder_points -= 0.5
-                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
-            "Текстура гоблина":
-                vas "Так держать!"
-                $ coder_points += 5
-                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
-                $ rightChoice = True
+    $ card_shirts = "skeleton_boss | mage_boss | goblin_boss"
+    $ body = ""    # body may be skeleton/goblin/mage
+    menu:
+        "Текстура скелета":
+            $ coder_points += 0.5
+            "Босс-скелет? Интересно..."
+            $ body = "skeleton"
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "Текстура тёмного мага":
+            "Тёмный маг не очень подходит под стилистику игры. Ну ладно..."
+            $ coder_points += 0.5
+            $ body = "mage"
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "Текстура гоблина":
+            vas "Так держать!"
+            $ coder_points += 5
+            $ body = "goblin"
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
                 
     vas "Теперь давайте пропишем ему количество здоровья..."  
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
-    $ rightChoice = False
-    while(not rightChoice):
-        menu:
-            "1000 хп":
-                vas "Так держать!"
-                $ coder_points += 5
-                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
-                $ rightChoice = True
-            "100 хп":
-                vas "Босс получается, как сильный моб..." 
-                vas "Играть не интересно. Попробуй снова!"
-                $ coder_points -= 0.5
-                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
-            "10 хп":
-                vas "Босс получается, совесем скучным! Даже у гоблинов больше здоровья!" 
-                vas "Попробуй снова!"
-                $ coder_points -= 0.5
-                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+    $ card_shirts = "hp1000 | hp100 | hp50"
+    menu:
+        "1000 хп":
+            vas "Так держать!"
+            $ coder_points += 5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "100 хп":
+            vas "Босс получается, как сильный моб..." 
+            vas "Играть неинтересно."
+            $ coder_points -= 3
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "10 хп":
+            vas "Босс получается, совесем скучным! Даже у простых гоблинов больше здоровья!" 
+            $ coder_points -= 5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
 
-    vas "Какое оружие по сценарию должен использовать король гоблинов?"   
-    $ card_shirts = "head_and_question_mark | head_and_question_mark | head_and_question_mark"
-    $ rightChoice = False
-    while(not rightChoice):
-        menu:
-            "Шпагу":
-                vas "Он же гоблин! Какая шпага?"
-                $ coder_points -= 0.5
-                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
-            "Царский щит":
-                vas "А как он будет атаковать?"
-                $ coder_points -= 0.5
-                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}") 
-            "Посох с черепом":
-                vas "Так держать!" 
-                $ coder_points += 5
-                $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
-                $ rightChoice = True
+    vas "Какое оружие по сценарию должен использовать босс?"   
+    $ card_shirts = "long_sword | shield | staff"
+    $ weapon = ""
+    menu:
+        "Шпагу":
+            vas "Пусть будет шпага..."
+            $ weapon = "rapier"
+            $ coder_points += 2.5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+        "Царский щит":
+            vas "Щит? А как он будет атаковать? Ну ладно..."
+            $ weapon = "shield"
+            $ coder_points += 1.5
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}") 
+        "Посох":
+            vas "Так держать! Как раз подходит боссу!" 
+            $ weapon = "staff"
+            $ coder_points += 3
+            $ renpy.notify(f"Очки разработчика {round(coder_points, 2)}")
+    play sound "audio/SFX/boss_laugh.ogg" volume 0.5
+    hide shapeless with dissolve
+    if (body == "skeleton" and weapon == "shield"):
+        show vas at right with dissolve
+    if(body != "skeleton"):
+        show vas at right with dissolve
+    show expression "character/[body]_with_a_[weapon].png"
+    
 
-    vas "Фух, это было не просто... Но ты справился!"
+    vas "Фух, это было непросто... Но ты справился!"
     vas "Это было просто нечто! Спасибо тебе большое!"
     vas "Остается только победить этого босса!"
     vas "Вперёд!"
+    
+    scene black with dissolve
+    play sound "audio/SFX/roar.ogg" volume 0.5
+    scene boss_cave with pixellate
+    show vas normal at center
+
     if(is_giga_sword_is_given):
         "Вы моментально победили босса, потому что у вас был СУПЕР ГИГА УЛЬТРА МЕЧ!" 
         "Но вы чувствуете, что поработали не зря!"
     else:
         "Вы долго сражались с этим боссом. Но все-таки победили! Вы поработали не зря!"
-    hide dummy
+
     vas "Неужели! В игре больше нет ошибок и багов!"
     vas "Я очень тебе благодарен!"
     vas "Теперь я могу опубликовать игру на площадках!"
     vas "Мне не терпится узнать, какие оценки она соберет!"
-    # lama
-    show dummy at truecenter 
-    "Спустя какое-то время, Вася выложил игру на разные площадки..."
-    if(coder_points < 16):
+    if (is_the_lama_easter_egg):
+        show lama05 at left
+    return
+
+label End:
+    stop music fadeout 0.5
+    play music "audio/Various Themes/Origins.ogg" fadein 0.5 volume 0.5 loop
+    scene itman with pixellate
+    "Вы выбрались из игры!"
+    vas "Ура! Спасибо тебе! Теперь мы снова дома!"
+    vas "И игру починили!"
+    "Какое-то время спустя  Вася выложил игру на разные площадки..."
+    if(coder_points < 19):
         "Васина игра не возымела большой популярности. Но Вася получил большой опыт. И начинает разрабатывать вторую часть игры!"
         "И все это ваша заслуга!"
-    elif (16 <= coder_points < 22):
+    elif (19 <= coder_points < 25):
         "Васину игру хорошо оценили игроки. Фанаты требуют второй части! И все это ваша заслуга!"
     else:
         "Васина игра взлетела среди игроков. Она рвет все рекорды по онлайнам. И все благодаря вам!"
+    
+    show black with fade
+    "Конец! {w=2.5} {nw}" with fade
+    "Над игрой работали: {w=3.5} {nw}" with fade
+    "Программист - Матушкин Антон {w=3.5} {nw}" with fade
+    "Тимлид - Мезев Даниил {w=3.5} {nw}" with fade
+    "Геймдизайнер - Кабицкий Георгий {w=3.5} {nw}" with fade
+    "Аналитик - Лещев Даниил {w=3.5} {nw}" with fade
+    "Сценарист - Воронцов Егор {w=3.5} {nw}" with fade
     return
 
 label variables:
@@ -1015,15 +1072,5 @@ label variables:
     $ is_giga_sword_is_given = False
     $ is_the_lama_easter_egg = False
     $ flag = False
-    return
-
-label End:
-    show black with fade
-    "Конец!"
-    "Над игрой работали: {w=1.2} {nw}"
-    "Программист - Матушкин Антон {w=1.5} {nw}"
-    "Тимлид - Мезев Даниил {w=1.5} {nw}"
-    "Геймдизайнер - Кабицкий Георгий {w=1.5} {nw}"
-    "Аналитик - Лещев Даниил {w=1.5} {nw}"
-    "Сценарист - Воронцов Егор {w=1.5} {nw}"
+    $ boss_skin = ""
     return
