@@ -3,6 +3,10 @@
 
 >[Последний релиз](https://github.com/Pavyk96/developer/releases)
 
+#### **Видеопрезентация**
+
+>https://www.youtube.com/watch?v=Zr6lBj1-sYU
+
 #### **Доска с задачами**
 
 >https://github.com/users/Pavyk96/projects/2
