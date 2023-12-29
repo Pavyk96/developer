@@ -24,7 +24,7 @@ define gui.show_name = True
 ## The version of the game.
 
 
-define config.version = "1.5.2"
+define config.version = "1.5.3"
 
 
 ## Text that is placed on the game's about screen. Place the text between the
@@ -209,4 +209,4 @@ init python:
 
 # define build.itch_project = "renpytom/test-project"
 
-define config.developer = True
+define config.developer = False
