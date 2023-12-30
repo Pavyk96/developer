@@ -1075,5 +1075,8 @@ label variables:
     $ is_giga_sword_is_given = False
     $ is_the_lama_easter_egg = False
     $ flag = False
+    $ withPetr = False
     $ boss_skin = ""
+    $ body = ""
+    $ weapon = ""
     return
